@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  'extends': [
+  extends: [
     'airbnb-base',
     'eslint:recommended',
     '@vue/eslint-config-typescript',
@@ -20,7 +20,7 @@ module.exports = {
   plugins: ['vue'],
   parserOptions: {
     ecmaVersion: 'latest',
-    sourceType: 'module'
+    sourceType: 'module',
   },
   rules: {
     'no-plusplus': 'off',
@@ -44,4 +44,4 @@ module.exports = {
       },
     ],
   },
-}
+};

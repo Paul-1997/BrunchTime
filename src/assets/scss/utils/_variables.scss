@@ -1,7 +1,8 @@
 // custom color
 $primary: $orange-200;
 $secondary: $red-700;
-$accent: #b2444d;
+// $accent: #b2444d;
+$accent: $orange-500;
 $neutral: $gray-600;
 $neutral-dark: $gray-800;
 $neutral-light: $gray-200;
@@ -20,7 +21,18 @@ $theme-colors: (
   'neutral-dark': $neutral-dark,
   'neutral-light': $neutral-light,
 );
-
+//fz
+$font-sizes: (
+  sm: $font-size-base * 0.875,
+  base: $font-size-base,
+  lg: $font-size-base * 1.25,
+  xl: $font-size-base * 1.5,
+  2xl: $font-size-base * 2,
+  3xl: $font-size-base * 2.25,
+  4xl: $font-size-base * 3,
+  5xl: $font-size-base * 4,
+  6xl: $font-size-base * 5,
+);
 // options
 $enable-rfs: false;
 $enable-negative-margins: true;
@@ -82,3 +94,5 @@ $headings-line-height: 1.5;
 $form-text-margin-top: 0;
 // scss-docs-start form-label-variables
 $form-label-margin-bottom: 0 !default;
+// offcanvas
+$offcanvas-horizontal-width: fit-content;

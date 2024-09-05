@@ -1,0 +1,26 @@
+.transition {
+  transition: all 0.5s ease;
+}
+
+.transition {
+  transition-duration: 0.5s; // 設置過渡時間
+  transition-timing-function: ease; // 設置過渡的時間函數
+  //type
+  &-color {
+    transition-property: color, background-color;
+  }
+  &-size {
+    transition-property: height, width;
+  }
+  &-transform {
+    transition-property: transform, rotate, scale;
+  }
+}
+
+$durations: '100', '250', '350', '500', '750', '1000';
+
+@each $duration in $durations {
+  .duration-#{$duration} {
+    transition-duration: #{$duration}ms;
+  }
+}

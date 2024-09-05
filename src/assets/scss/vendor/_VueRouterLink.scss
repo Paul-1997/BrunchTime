@@ -1,0 +1,13 @@
+.onActiveLink {
+  color: $secondary;
+}
+
+.nav__link:has(.onActiveLink) {
+  background-color: $primary;
+}
+
+.nav__link:not(:has(.onActiveLink)):where(:focus, :hover, :focus-within) {
+  color: $secondary;
+  scale: 1.05;
+  transition: scale 0.45s ease;
+}

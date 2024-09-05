@@ -25,7 +25,7 @@ $custom-utilities: (
       50: 50%,
       75: 75%,
       100: 100%,
-      fit: fit,
+      fit: fit-content,
       min: min-content,
       max: max-content,
       auto: auto,
@@ -78,4 +78,4 @@ $custom-utilities: (
   ),
 );
 
-$utilities: map-merge($custom-utilities, $utilities);
+$utilities: $custom-utilities !default;
