@@ -7,15 +7,18 @@
 
 <script lang="ts">
 import Panel from '@/components/Dashboard/PanelComp.vue';
+import userStore from '@/stores/user.ts';
+import { mapActions } from 'pinia';
 
 export default {
-  data() {
-    return {
-      panel: '',
-    };
+  methods: {
+    ...mapActions(userStore, ['checkLogin']),
   },
   components: {
     Panel,
+  },
+  mounted() {
+    this.checkLogin();
   },
 };
 </script>
