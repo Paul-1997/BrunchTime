@@ -23,11 +23,11 @@
         <ul class="d-flex gap-8 pb-6">
           <li>
             <RouterLink to="/">
-              <span class="material-symbols-outlined fs-3xl">home</span>
+              <span class="material-symbols-outlined fs-3xl cursor-pointer">home</span>
             </RouterLink>
           </li>
           <li>
-            <span class="material-symbols-outlined fs-3xl">logout</span>
+            <span class="material-symbols-outlined fs-3xl cursor-pointer" @click="$emit('userLoginOut')">logout</span>
           </li>
         </ul>
       </div>

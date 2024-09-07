@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { AxiosResponse, Method } from 'axios';
 import Cookies from 'js-cookie';
 
-const authToken = `${Cookies.get('accessToken')}123` ?? '';
+const authToken = `${Cookies.get('accessToken')}` ?? '';
 const { VITE_APP_API_URL: base } = import.meta.env;
 
 export default async function FetchData(

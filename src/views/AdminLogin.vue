@@ -10,7 +10,8 @@
             class="login__input form-control text-secondary"
             id="userEmail"
             placeholder="請輸入帳號"
-            v-model="user.email"
+            v-model="user.username"
+            @input="clearMsg"
           />
           <label for="userEmail" class="text-neutral">Email address</label>
         </div>
@@ -21,6 +22,7 @@
             id="userPassword"
             placeholder="請輸入密碼"
             v-model="user.password"
+            @input="clearMsg"
           />
           <label for="userPassword" class="text-neutral">Password</label>
         </div>
@@ -37,11 +39,12 @@
           </div>
         </div>
         <div>
-          <!-- <div class="mx-auto" :class="{ loader: onLoading && errMsg === '' }">
-          <p class="text-danger fs-5 text-center" v-if="errMsg">
-            {{ errMsg }}
-          </p>
-        </div> -->
+          <div class="mx-auto">
+            <p class="text-danger fs-5 text-center" v-if="!isLoading || loginFailMsg !== ''">
+              {{ loginFailMsg }}
+            </p>
+            <div class="loader mx-auto" v-else></div>
+          </div>
         </div>
       </form>
     </div>
@@ -50,7 +53,7 @@
 
 <script lang="ts">
 import { mapActions } from 'pinia';
-import userStore from '@/stores/user.ts';
+import userStore from '@/stores/userStore.ts';
 import type { Admin } from '@/interface/Admin.ts';
 
 export default {
@@ -60,19 +63,40 @@ export default {
         username: '',
         password: '',
       } as Admin,
+      loginFailMsg: '',
+      isLoading: false,
     };
   },
   methods: {
     ...mapActions(userStore, ['adminLogin']),
     async doLogin() {
+      this.loginFailMsg = '';
+      if (!this.checkUserInput()) return;
       try {
+        this.isLoading = true;
         const isLogin = await this.adminLogin(this.user);
         if (isLogin) {
-          console.log(this.$router);
+          this.$router.push('/dashboard');
         }
       } catch (error) {
-        console.log(error);
+        this.loginFailMsg = '帳號或密碼錯誤!';
+      } finally {
+        this.isLoading = false;
       }
+    },
+    clearMsg() {
+      this.loginFailMsg = '';
+    },
+    checkUserInput() {
+      if (this.user.username.trim() === '') {
+        this.loginFailMsg = '帳號不得為空';
+        return false;
+      }
+      if (this.user.password.trim() === '') {
+        this.loginFailMsg = '密碼不得為空';
+        return false;
+      }
+      return this.loginFailMsg === '';
     },
   },
 };
@@ -90,7 +114,6 @@ export default {
   }
   &__input {
     width: min(300px, 95vw);
-    box-shadow: 0 0 0.25rem var(--secondary);
   }
   &__btn:hover {
     background: #ffb066;
