@@ -1,7 +1,9 @@
 <template>
-  <div class="d-flex">
+  <div class="d-flex gap-2">
     <Panel @userLoginOut="logout" />
-    <RouterView />
+    <main class="mainDashboardContent flex-grow-1">
+      <RouterView />
+    </main>
   </div>
 </template>
 
@@ -22,3 +24,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.mainDashboardContent {
+  @media (width > 767px) {
+    margin-inline-start: clamp(248px, 22.5vw, 300px);
+  }
+}
+</style>

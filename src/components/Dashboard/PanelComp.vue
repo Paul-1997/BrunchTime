@@ -1,6 +1,6 @@
 <template>
-  <nav ref="panel__wrapper" class="pe-2 vh-100 d-flex align-items-center">
-    <div class="panel bg-accent d-flex flex-column align-items-center min-vh-100 overflow-hidden" ref="panel">
+  <nav ref="panel__wrapper" class="panel__wrapper pe-2 vh-100 d-flex z-2 top-0 position-fixed">
+    <div class="panel bg-accent d-flex flex-column align-items-center overflow-hidden" ref="panel">
       <img src="/logo.png" alt="logo" class="home-logo mb-4" />
       <ul class="w-100 text-center fs-xl">
         <li class="nav__link mb-3">
@@ -32,7 +32,12 @@
         </ul>
       </div>
     </div>
-    <a href="" class="rounded-end-pill bg-primary pe-2 py-5 d-sm-none" @click.prevent="togglePanel">
+    <a
+      href=""
+      class="rounded-end-pill pe-1 py-3 d-md-none align-self-center"
+      @click.prevent="togglePanel"
+      style="background-color: #ffc50f"
+    >
       <span class="material-symbols-outlined transition duration-250" :class="isPanelOpenIconClass">
         double_arrow
       </span>
@@ -62,10 +67,13 @@ export default {
     togglePanelByWidth() {
       if (this.panel === null) return;
       const width = window.innerWidth;
-      if (width < 576) {
+      // const el = this.$refs.panel__wrapper as HTMLElement;
+      if (width < 769) {
+        // el.classList.add('position-fixed');
         this.panel.classList.add('hidden');
         this.isPanelOpen = false;
       } else {
+        // el.classList.remove('position-fixed');
         this.panel?.classList.remove('hidden');
         this.isPanelOpen = true;
       }
@@ -88,10 +96,17 @@ export default {
     // 移除監聽器
     window.removeEventListener('resize', this.togglePanelByWidth);
   },
+  watch: {
+    '$route.query': function () {
+      if (window.innerWidth < 768) this.togglePanel();
+    },
+  },
 };
 </script>
 
 <style scoped lang="scss">
+$sideBarSize: clamp(248px, 22.5vw, 300px);
+
 .home-logo {
   margin-inline: auto;
   aspect-ratio: 1;
@@ -99,7 +114,7 @@ export default {
 }
 
 .panel {
-  width: clamp(248px, 17.5vw, 300px);
+  width: $sideBarSize;
   transition: width 0.2s ease-out;
 
   &.hidden {
