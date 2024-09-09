@@ -1,5 +1,5 @@
 <template>
-  <nav ref="panel__wrapper" class="panel__wrapper pe-2 vh-100 d-flex z-2 top-0 position-fixed">
+  <nav ref="panel__wrapper" class="panel__wrapper vh-100 d-flex z-2 top-0 position-fixed">
     <div class="panel bg-accent d-flex flex-column align-items-center overflow-hidden" ref="panel">
       <img src="/logo.png" alt="logo" class="home-logo mb-4" />
       <ul class="w-100 text-center fs-xl">
@@ -67,13 +67,10 @@ export default {
     togglePanelByWidth() {
       if (this.panel === null) return;
       const width = window.innerWidth;
-      // const el = this.$refs.panel__wrapper as HTMLElement;
       if (width < 769) {
-        // el.classList.add('position-fixed');
         this.panel.classList.add('hidden');
         this.isPanelOpen = false;
       } else {
-        // el.classList.remove('position-fixed');
         this.panel?.classList.remove('hidden');
         this.isPanelOpen = true;
       }

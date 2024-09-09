@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 // css
-import './assets/bootstrap.ts';
+import 'bootstrap';
 import './assets/main.scss';
 // vue pinia
 import { createApp, markRaw } from 'vue';

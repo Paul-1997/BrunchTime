@@ -2,12 +2,11 @@ import { defineStore } from 'pinia';
 import useFetch from '@/composable/useFetch.ts';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
-const productStore = defineStore('products', {
+const couponStore = defineStore('coupons', {
   actions: {
-    async getProducts(from: 'admin' | 'custom', page: number = 0) {
+    async getProducts(from: 'admin' | 'custom') {
       try {
-        let apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}products`;
-        if (page > 0) apiPath += `?page=${page}`;
+        const apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}products`;
         const { data } = await useFetch(apiPath, 'get', from === 'admin');
         return data;
       } catch (err) {
@@ -58,4 +57,4 @@ const productStore = defineStore('products', {
   },
 });
 
-export default productStore;
+export default couponStore;
