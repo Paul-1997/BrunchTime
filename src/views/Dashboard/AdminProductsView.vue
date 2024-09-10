@@ -19,7 +19,7 @@
           </li>
         </ul>
       </div>
-      <button type="button" class="btn btn-accent" @click="getModal('productModal')">新增產品</button>
+      <button type="button" class="btn btn-accent" @click="getModal('productModal', {} as Product)">新增產品</button>
     </div>
     <div class="mb-10">
       <ul class="row">
@@ -40,52 +40,33 @@
           <div class="button-group ms-auto">
             <span
               class="material-symbols-outlined interactive-button me-md-3 cursor-pointer"
-              @click="getModal('productModal')"
+              @click="getModal('productModal', product)"
             >
               edit
             </span>
-            <span class="material-symbols-outlined interactive-button cursor-pointer" @click="getModal('deleteModal')">
+            <span
+              class="material-symbols-outlined interactive-button cursor-pointer"
+              @click="getModal('deleteModal', product)"
+            >
               delete
             </span>
           </div>
         </li>
       </ul>
     </div>
-    <Pagination :pagination="paginationData" @update-page="getNewProduct" />
+    <Pagination :pagination="pagination" @update-page="getNewProduct" />
   </div>
 
-  <ProductModal ref="productModal" />
+  <ProductModal ref="productModal" :product="tempProduct" @update-product="updateProducts" />
   <DeleteModal ref="deleteModal" />
 </template>
 <script lang="ts">
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import productStore from '@/stores/productStore.ts';
 import ProductModal from '@/components/Dashboard/ProductModal.vue';
 import Pagination from '@/components/PaginationComp.vue';
 import DeleteModal from '@/components/Dashboard/DeleteModal.vue';
-
-interface PaginationType {
-  total_pages: number;
-  current_page: number;
-  has_pre: boolean;
-  has_next: boolean;
-  category: string;
-}
-
-interface Product {
-  category: string; // 类别
-  content: string; // 内容
-  description: string; // 描述
-  id: string; // 唯一标识符
-  imageUrl: string; // 图片 URL
-  isNew: boolean; // 是否为新品
-  is_enabled: string; // 是否启用（字符串类型）
-  num: number; // 数量
-  origin_price: number; // 原价
-  price: number; // 价格
-  title: string; // 标题
-  unit: string; // 单位
-}
+import type Product from '@/interface/product';
 
 interface OrderOptions {
   highest_price: `價格<span class="material-symbols-outlined fs-base ms-2">arrow_upward</span>`;
@@ -100,23 +81,19 @@ const orders: OrderOptions = {
   lowest_price: '價格<span class="material-symbols-outlined fs-base ms-2">arrow_downward</span>',
   is_enable: '是否啟用',
 };
+
 export default {
   data() {
     return {
-      productList: [] as Product[],
       orderOption: [...Object.keys(orders)],
       currentOrderType: 'category',
-      paginationData: {} as PaginationType,
+      tempProduct: {} as Product,
     };
   },
   methods: {
-    ...mapActions(productStore, ['getAllProducts', 'getProducts']),
+    ...mapActions(productStore, ['getAllProducts', 'getProducts', 'updateProducts']),
     async getNewProduct(page: number) {
-      const result = await this.getProducts('admin', page);
-      if (result) {
-        this.productList = result.products;
-        this.paginationData = result.pagination;
-      }
+      await this.getProducts('admin', page);
     },
     currentOrderHTML(order: keyof OrderOptions) {
       return orders[order];
@@ -124,12 +101,14 @@ export default {
     changeOrder(order: string) {
       this.currentOrderType = order;
     },
-    getModal(modalName: string) {
+    getModal(modalName: string, data: Product) {
       const modal: any = this.$refs[modalName];
+      this.tempProduct = { ...data };
       modal.openModal();
     },
   },
   computed: {
+    ...mapState(productStore, ['productList', 'pagination']),
     orderedProduct() {
       return [...this.productList].sort((a, b) => {
         if (this.currentOrderType === 'highest_price') return a.price - b.price;
@@ -140,12 +119,7 @@ export default {
     },
   },
   async mounted() {
-    const result = await this.getProducts('admin');
-    if (result) {
-      this.productList = result.products;
-      this.paginationData = result.pagination;
-    }
-    // (this.$refs.productModal as InstanceType<typeof ProductModal>).openModal();
+    await this.getProducts('admin');
   },
   components: {
     ProductModal,
