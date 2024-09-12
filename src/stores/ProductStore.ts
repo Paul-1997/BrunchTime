@@ -21,9 +21,6 @@ const productStore = defineStore('products', {
         this.productList = data.products;
         this.pagination = data.pagination;
       } catch (err) {
-        useAlert({
-          html: `<p>${err}</p>`,
-        });
         console.log(err);
       }
     },
@@ -61,8 +58,8 @@ const productStore = defineStore('products', {
       try {
         const apiPath = product.id ? `v2/api/${path}/admin/product/${product.id}` : `v2/api/${path}/admin/product`;
         const method = product.id ? 'put' : 'post';
-        const { data } = await useFetch(apiPath, method, true, product);
-        console.log(data);
+        const { data } = await useFetch(apiPath, method, true, { data: { ...product } });
+        if (data.success) this.getProducts('admin');
       } catch (err) {
         console.log(err);
       }

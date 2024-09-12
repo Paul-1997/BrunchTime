@@ -13,13 +13,58 @@
       <div class="modal-content">
         <div class="modal-header bg-accent">
           <h5 class="modal-title fw-bold fs-2xl" id="ProductModalLabel">
-            {{ product.id ? '新增產品' : '編輯產品' }}
+            {{ product.id ? '編輯產品' : '新增產品' }}
           </h5>
           <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
         </div>
         <div class="modal-body d-flex flex-column flex-lg-row gap-4">
-          <div class="col-lg-5 col-12">
-            <img :src="deepCloneProduct.imageUrl" alt="" class="product__mainImage" />
+          <div class="col-lg-4 col-12 d-flex flex-column">
+            <div class="border rounded border-neutral mb-3">
+              <img :src="deepCloneProduct.imageUrl" alt="" class="product__mainImage" />
+            </div>
+            <div class="productImageGroup mb-5">
+              <template v-for="(image, i) in deepCloneProduct.imagesUrl" :key="image">
+                <img
+                  :src="image"
+                  :alt="`productImages${i + 1}`"
+                  class="border border-neutral rounded"
+                  v-if="image !== ''"
+                />
+                <img src="/not-found.png" class="border border-neutral rounded" alt="" v-else />
+              </template>
+            </div>
+            <div class="">
+              <div>
+                <div class="form-group mb-2 border border-info border-2 p-2 rounded">
+                  <label for="editMainImage" class="form-label">主圖</label>
+                  <input type="text" class="form-control" id="editMainImage" v-model="deepCloneProduct.imageUrl" />
+                </div>
+                <hr class="my-1" />
+                <template v-for="(images, index) in deepCloneProduct.imagesUrl" :key="index + '.' + images">
+                  <div class="form-group mb-2 border border-natural-light border-2 p-2 rounded">
+                    <label :for="'moreImg' + index" class="form-label d-flex"
+                      >圖片{{ index + 1 }}
+                      <span
+                        class="btn btn-close align-middle ms-auto"
+                        @click="deepCloneProduct.imagesUrl.splice(index, 1)"
+                      ></span
+                    ></label>
+
+                    <input
+                      type="text"
+                      class="form-control"
+                      :value="deepCloneProduct.imagesUrl[index]"
+                      @input="handleImgGroupInput(($event.target as HTMLInputElement).value, index)"
+                    />
+                  </div>
+                  <hr class="my-1" />
+                </template>
+                <button type="button" class="btn btn-success btn-sm" @click="addImages">
+                  <!-- :disabled="isEnableAddNewImgBtn" -->
+                  新增副圖
+                </button>
+              </div>
+            </div>
           </div>
           <div class="flex-grow-1">
             <div class="row mb-3">
@@ -150,6 +195,7 @@
 import { Modal } from 'bootstrap';
 import type { VueElement } from 'vue';
 import type Product from '@/interface/product.ts';
+import useDebounce from '@/composable/useDebounce.ts';
 
 export default {
   props: ['product'],
@@ -167,8 +213,24 @@ export default {
       this.modal!.hide();
     },
     emitUpdate() {
+      const time = Date.now();
+      if (!this.deepCloneProduct.createAt) this.deepCloneProduct.createAt = time;
+      this.deepCloneProduct.updateAt = time;
       this.$emit('updateProduct', this.deepCloneProduct);
       this.closeModal();
+    },
+    addImages() {
+      if (!this.deepCloneProduct.imagesUrl) this.deepCloneProduct.imagesUrl = [''];
+      else {
+        this.deepCloneProduct.imagesUrl = [...this.deepCloneProduct.imagesUrl, ''];
+      }
+    },
+    doDebounce: useDebounce((t, idx, v) => {
+      const target = t;
+      target[idx] = v;
+    }),
+    handleImgGroupInput(url: string, idx: number) {
+      this.doDebounce(this.deepCloneProduct.imagesUrl, idx, url);
     },
   },
   mounted() {
@@ -186,6 +248,21 @@ export default {
 .input__extraFix {
   @media (width> 576px) {
     padding-inline-start: 6px;
+  }
+}
+.product__mainImage {
+  object-fit: cover;
+  min-height: 200px;
+  max-height: 400px;
+}
+.productImageGroup {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(3, minmax(100px, 1fr));
+  & > img {
+    width: 100%;
+    object-fit: cover;
+    height: 80px;
   }
 }
 </style>
