@@ -58,7 +58,12 @@
   </div>
 
   <ProductModal ref="productModal" :product="tempProduct" @update-product="updateProducts" />
-  <DeleteModal ref="deleteModal" />
+  <DeleteModal
+    ref="deleteModal"
+    :title="tempProduct.title"
+    :target-id="tempProduct.id"
+    @delete-target="async (id) => await deleteProduct(id)"
+  />
 </template>
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
@@ -91,7 +96,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(productStore, ['getAllProducts', 'getProducts', 'updateProducts']),
+    ...mapActions(productStore, ['getAllProducts', 'getProducts', 'updateProducts', 'deleteProduct']),
     async getNewProduct(page: number) {
       await this.getProducts('admin', page);
     },

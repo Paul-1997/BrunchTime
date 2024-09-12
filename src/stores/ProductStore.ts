@@ -47,11 +47,10 @@ const productStore = defineStore('products', {
     async deleteProduct(id: string) {
       try {
         const apiPath = `v2/api/${path}/admin/product/${id}`;
-        const { data } = await useFetch(apiPath, 'get', true);
-        return data;
+        const { data } = await useFetch(apiPath, 'delete', true);
+        if (data.success) this.getProducts('admin');
       } catch (err) {
         console.log(err);
-        return false;
       }
     },
     async updateProducts(product: Product) {
