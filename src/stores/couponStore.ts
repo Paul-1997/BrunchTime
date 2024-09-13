@@ -3,15 +3,21 @@ import useFetch from '@/composable/useFetch.ts';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
 const couponStore = defineStore('coupons', {
+  state() {
+    return {
+      couponList: [],
+      pagination: {},
+    };
+  },
   actions: {
-    async getProducts(from: 'admin' | 'custom') {
+    async getCoupon(from: 'admin' | 'custom') {
       try {
-        const apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}products`;
+        const apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}coupons`;
         const { data } = await useFetch(apiPath, 'get', from === 'admin');
-        return data;
+        this.couponList = data.coupons;
+        this.pagination = data.pagination;
       } catch (err) {
         console.log(err);
-        return false;
       }
     },
     async getAllProducts(from: 'admin' | 'custom') {

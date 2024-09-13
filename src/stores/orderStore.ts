@@ -1,17 +1,24 @@
 import { defineStore } from 'pinia';
 import useFetch from '@/composable/useFetch.ts';
+import type { Order } from '@/interface/order';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
+
 const orderStore = defineStore('orders', {
+  state() {
+    return {
+      orderList: [] as Order[],
+      pagination: {},
+    };
+  },
   actions: {
-    async getProducts(from: 'admin' | 'custom') {
+    async getOrders(from: 'admin' | 'custom') {
       try {
-        const apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}products`;
+        const apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}orders`;
         const { data } = await useFetch(apiPath, 'get', from === 'admin');
-        return data;
+        if (data.success) this.orderList = data.orders;
       } catch (err) {
         console.log(err);
-        return false;
       }
     },
     async getAllProducts(from: 'admin' | 'custom') {

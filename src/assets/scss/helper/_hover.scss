@@ -1,0 +1,10 @@
+@import '../utils/variables';
+
+@each $theme, $color in $theme-colors {
+  .text-hover-#{$theme}:hover {
+    color: $color;
+  }
+  .bg-hover-#{$theme}:hover {
+    background-color: $color;
+  }
+}
