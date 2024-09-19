@@ -14,7 +14,7 @@
       </li>
       <li class="page-item" v-for="page in pagination.total_pages" :key="page">
         <a
-          class="page-link"
+          class="page-link bg-hover-accent"
           href="#"
           @click.prevent="changePage(page)"
           :class="{ 'text-neutral-dark bg-primary': pagination.current_page === page }"
@@ -41,6 +41,7 @@ export default {
   props: ['pagination'],
   methods: {
     changePage(page: number) {
+      if (page === this.pagination.current_page) return;
       this.$emit('updatePage', page);
     },
   },

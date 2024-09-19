@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import useFetch from '@/composable/useFetch.ts';
+import useFetch from '@/composable/useFetch';
 import type Product from '@/interface/product';
 import type PaginationType from '@/interface/pagination';
-import useAlert from '@/composable/useAlert.ts';
+import useAlert from '@/composable/useAlert';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
 const productStore = defineStore('products', {

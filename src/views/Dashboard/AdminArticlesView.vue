@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
-import articleStore from '@/stores/articleStore.ts';
+import articleStore from '@/stores/articleStore';
 
 export default {
   computed: {

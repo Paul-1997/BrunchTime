@@ -1,23 +1,9 @@
-// 定义 Product 相关的接口
-interface ProductDetails {
-  category: string;
-  content: string;
-  description: string;
-  id: string;
-  imageUrl: string;
-  imagesUrl: string[];
-  is_enabled: string;
-  num: number;
-  origin_price: number;
-  price: number;
-  title: string;
-  unit: string;
-}
+import type Product from './product';
 
 interface ProductItem {
   final_total: number;
   id: string;
-  product: ProductDetails;
+  product: Product;
   product_id: string;
   qty: number;
   total: number;
@@ -44,6 +30,7 @@ interface Order {
   total: number;
   user: User;
   num: number;
+  message?: string;
 }
 
-export type { Order, ProductDetails, ProductItem, Products };
+export type { Order, ProductItem, Products };

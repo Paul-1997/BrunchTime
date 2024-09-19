@@ -5,7 +5,7 @@
 
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
-import couponStore from '@/stores/couponStore.ts';
+import couponStore from '@/stores/couponStore';
 
 export default {
   computed: {

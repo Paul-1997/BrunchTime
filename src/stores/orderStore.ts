@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import useFetch from '@/composable/useFetch.ts';
+import useFetch from '@/composable/useFetch';
 import type { Order } from '@/interface/order';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
@@ -12,53 +12,43 @@ const orderStore = defineStore('orders', {
     };
   },
   actions: {
-    async getOrders(from: 'admin' | 'custom') {
+    async getOrders(from: 'admin' | 'custom', page: number = 0) {
       try {
-        const apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}orders`;
+        let apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}orders`;
+        if (page > 0) apiPath += `?page=${page}`;
         const { data } = await useFetch(apiPath, 'get', from === 'admin');
-        if (data.success) this.orderList = data.orders;
+        if (data.success) {
+          this.orderList = data.orders;
+          this.pagination = data.pagination;
+        }
       } catch (err) {
         console.log(err);
       }
     },
-    async getAllProducts(from: 'admin' | 'custom') {
+    async getSingleOrder(id: string) {
       try {
-        const apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}products/all`;
-        const { data } = await useFetch(apiPath, 'get', from === 'admin');
-        return data;
-      } catch (err) {
-        console.log(err);
-        return false;
-      }
-    },
-    async getSingleProduct(id: string) {
-      try {
-        const apiPath = `v2/api/${path}/product/${id}`;
+        const apiPath = `v2/api/${path}/order/${id}`;
         const { data } = await useFetch(apiPath, 'get');
-        return data;
       } catch (err) {
         console.log(err);
-        return false;
       }
     },
-    async deleteProduct(id: string) {
+    async deleteOrder(id: string) {
       try {
         const apiPath = `v2/api/${path}/admin/product/${id}`;
         const { data } = await useFetch(apiPath, 'get', true);
-        return data;
+        if (data.success) this.getOrders('admin');
       } catch (err) {
         console.log(err);
-        return false;
       }
     },
-    async updateProducts(product: object) {
+    async updateOrder(order: Order) {
       try {
-        const apiPath = product.id ? `v2/api/${path}/admin/product/${product.id}` : `v2/api/${path}/admin/product`;
-        const { data } = await useFetch(apiPath, 'get', true, product);
-        return data;
+        const apiPath = `v2/api/${path}/admin/order/${order.id}`;
+        const { data } = await useFetch(apiPath, 'put', true, { data: order });
+        if (data.success) this.getOrders('admin');
       } catch (err) {
         console.log(err);
-        return false;
       }
     },
   },

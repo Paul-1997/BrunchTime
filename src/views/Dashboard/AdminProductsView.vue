@@ -67,7 +67,7 @@
 </template>
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
-import productStore from '@/stores/productStore.ts';
+import productStore from '@/stores/productStore';
 import ProductModal from '@/components/Dashboard/ProductModal.vue';
 import Pagination from '@/components/PaginationComp.vue';
 import DeleteModal from '@/components/Dashboard/DeleteModal.vue';

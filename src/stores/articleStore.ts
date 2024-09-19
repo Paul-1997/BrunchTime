@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import useFetch from '@/composable/useFetch.ts';
+import useFetch from '@/composable/useFetch';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
 const articleStore = defineStore('articles', {

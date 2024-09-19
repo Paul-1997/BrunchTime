@@ -43,5 +43,13 @@ module.exports = {
         trailingComma: 'all',
       },
     ],
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
   },
 };

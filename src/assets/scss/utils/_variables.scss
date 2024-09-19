@@ -5,7 +5,7 @@ $secondary: $red-700;
 $accent: $orange-400;
 $neutral: $gray-600;
 $neutral-dark: $gray-800;
-$neutral-light: $gray-200;
+$neutral-light: $gray-400;
 
 $theme-colors: (
   'primary': $primary,
@@ -89,7 +89,7 @@ $grid-row-columns: 6 !default;
 // Typography
 $headings-margin-bottom: 0;
 $headings-line-height: 1.5;
-
+$border-color:$gray-400;
 // scss-docs-start form-text-variables
 $form-text-margin-top: 0;
 // scss-docs-start form-label-variables
