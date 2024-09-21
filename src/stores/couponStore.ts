@@ -1,63 +1,44 @@
 import { defineStore } from 'pinia';
-import useFetch from '@/composable/useFetch.ts';
+import useFetch from '@/composable/useFetch';
+import type Coupon from '@/interface/coupon';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
 const couponStore = defineStore('coupons', {
   state() {
     return {
-      couponList: [],
+      couponList: [] as Coupon[],
       pagination: {},
     };
   },
   actions: {
-    async getCoupon(from: 'admin' | 'custom') {
+    async getCoupons(page: number = 0) {
       try {
-        const apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}coupons`;
-        const { data } = await useFetch(apiPath, 'get', from === 'admin');
+        let apiPath = `v2/api/${path}/admin/coupons`;
+        if (page > 0) apiPath += `?page=${page}`;
+        const { data } = await useFetch(apiPath, 'get', true);
         this.couponList = data.coupons;
         this.pagination = data.pagination;
       } catch (err) {
         console.log(err);
       }
     },
-    async getAllProducts(from: 'admin' | 'custom') {
+    async deleteCoupon(id: string) {
       try {
-        const apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}products/all`;
-        const { data } = await useFetch(apiPath, 'get', from === 'admin');
-        return data;
+        const apiPath = `v2/api/${path}/admin/coupon/${id}`;
+        const { data } = await useFetch(apiPath, 'delete', true);
+        if (data.success) this.getCoupons();
       } catch (err) {
         console.log(err);
-        return false;
       }
     },
-    async getSingleProduct(id: string) {
+    async updateCoupons(coupon: Coupon) {
       try {
-        const apiPath = `v2/api/${path}/product/${id}`;
-        const { data } = await useFetch(apiPath, 'get');
-        return data;
+        const apiPath = coupon.id ? `v2/api/${path}/admin/coupon/${coupon.id}` : `v2/api/${path}/admin/Coupon`;
+        const method = coupon.id ? 'put' : 'post';
+        const { data } = await useFetch(apiPath, method, true, { data: coupon });
+        if (data.success) this.getCoupons();
       } catch (err) {
         console.log(err);
-        return false;
-      }
-    },
-    async deleteProduct(id: string) {
-      try {
-        const apiPath = `v2/api/${path}/admin/product/${id}`;
-        const { data } = await useFetch(apiPath, 'get', true);
-        return data;
-      } catch (err) {
-        console.log(err);
-        return false;
-      }
-    },
-    async updateProducts(product: object) {
-      try {
-        const apiPath = product.id ? `v2/api/${path}/admin/product/${product.id}` : `v2/api/${path}/admin/product`;
-        const { data } = await useFetch(apiPath, 'get', true, product);
-        return data;
-      } catch (err) {
-        console.log(err);
-        return false;
       }
     },
   },

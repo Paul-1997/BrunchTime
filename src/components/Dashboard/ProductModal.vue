@@ -46,14 +46,14 @@
                         >圖片{{ index + 1 }}
                         <span
                           class="btn btn-close align-middle ms-auto"
-                          @click="deepCloneProduct.imagesUrl.splice(index, 1)"
+                          @click="deepCloneProduct.imagesUrl!.splice(index, 1)"
                         ></span
                       ></label>
 
                       <input
                         type="text"
                         class="form-control"
-                        :value="deepCloneProduct.imagesUrl[index]"
+                        :value="deepCloneProduct.imagesUrl![index]"
                         @input="handleImgGroupInput(($event.target as HTMLInputElement).value, index)"
                       />
                     </div>

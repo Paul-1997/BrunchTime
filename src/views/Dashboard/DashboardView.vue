@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex">
     <Panel @userLoginOut="logout" />
-    <main class="mainDashboardContent flex-grow-1 mx-3">
+    <main class="mainDashboardContent flex-grow-1">
       <RouterView />
     </main>
   </div>
@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import Panel from '@/components/Dashboard/PanelComp.vue';
-import userStore from '@/stores/userStore.ts';
+import userStore from '@/stores/userStore';
 import { mapActions } from 'pinia';
 
 export default {
