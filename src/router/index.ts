@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import HomeView from '../views/FrontEnd/HomeView.vue';
+import ClientView from '@/views/Client/ClientView.vue';
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -14,12 +14,32 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView,
+      component: ClientView,
       children: [
         {
-          path: '/about',
+          path: '/',
+          name: 'home',
+          component: () => import('../views/Client/HomeView.vue'),
+        },
+        {
+          path: '/aboutUs',
           name: 'about',
-          component: () => import('../views/FrontEnd/AboutView.vue'),
+          component: () => import('../views/Client/AboutView.vue'),
+        },
+        {
+          path: '/products',
+          name: 'products',
+          component: () => import('../views/Client/ProductsView.vue'),
+        },
+        {
+          path: '/news',
+          name: 'news',
+          component: () => import('../views/Client/NewsView.vue'),
+        },
+        {
+          path: '/news/:id',
+          name: 'newDetail',
+          component: () => import('../views/Client/NewDetail.vue'),
         },
       ],
     },
