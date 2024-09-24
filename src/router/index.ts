@@ -13,31 +13,31 @@ const router = createRouter({
     // frontend
     {
       path: '/',
-      name: 'home',
+      name: 'base',
       component: ClientView,
       children: [
         {
-          path: '/',
+          path: '',
           name: 'home',
           component: () => import('../views/Client/HomeView.vue'),
         },
         {
-          path: '/aboutUs',
+          path: 'aboutUs',
           name: 'about',
           component: () => import('../views/Client/AboutView.vue'),
         },
         {
-          path: '/products',
+          path: 'products',
           name: 'products',
           component: () => import('../views/Client/ProductsView.vue'),
         },
         {
-          path: '/news',
+          path: 'news',
           name: 'news',
           component: () => import('../views/Client/NewsView.vue'),
         },
         {
-          path: '/news/:id',
+          path: 'news/:id',
           name: 'newDetail',
           component: () => import('../views/Client/NewDetail.vue'),
         },
