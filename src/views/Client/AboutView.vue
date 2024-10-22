@@ -1,11 +1,11 @@
 <template>
-  <div class="about__banner">
+  <div class="banner" style="background-image: url('public/aboutBanner.jpg')">
     <h2 class="rounded-3 w-fit mx-auto text-center text-secondary fw-bold fs-3xl bg-primary bg-opacity-75 px-8">
       關於我們<br />
       About Us
     </h2>
   </div>
-  <div class="container py-10">
+  <div class="container py-lg-lg py-md-10 py-6">
     <section class="py-8 row">
       <h2 class="text-center text-secondary fs-xl fs-md-3xl fw-bold mb-4">我們的理念</h2>
       <p class="aboutUs text-neutral-dark col-md-8 col-10 mx-auto mb-10 p-4 rounded-3">
@@ -54,15 +54,5 @@
   line-height: 2;
   border: dashed 6px var(--bs-accent);
   background-color: color-mix(in hsl shorter hue, var(--bs-primary) 60%, #fff 40%);
-}
-.about__banner {
-  align-content: center;
-  padding-block: 144px;
-  background: url('/public/aboutBanner.jpg') no-repeat;
-  background-size: cover;
-  background-position: 60% center;
-  @media (width < 768px) {
-    padding-block: 72px;
-  }
 }
 </style>

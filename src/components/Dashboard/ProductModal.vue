@@ -180,6 +180,7 @@
           </div>
           <div class="modal-footer">
             <!-- {{ deepCloneProduct }} -->
+            <upload @get-img="updateImg"></upload>
             <button type="button" class="px-6 btn btn-outline-neutral" @click="closeModal">取消</button>
             <button type="button" class="px-6 btn btn-success" @click="emitUpdate">
               {{ product.id ? '編輯' : '新增' }}
@@ -196,6 +197,7 @@ import { Modal } from 'bootstrap';
 import type { VueElement } from 'vue';
 import type Product from '@/interface/product';
 import useDebounce from '@/composable/useDebounce';
+import upload from '@/components/Dashboard/okokIs.vue';
 
 export default {
   props: ['product'],
@@ -205,7 +207,14 @@ export default {
       deepCloneProduct: {} as Product,
     };
   },
+  components: {
+    upload,
+  },
   methods: {
+    updateImg({ imageUrl }) {
+      console.log(imageUrl);
+      this.deepCloneProduct.imageUrl = imageUrl;
+    },
     openModal() {
       this.modal!.show();
     },

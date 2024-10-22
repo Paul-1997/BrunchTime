@@ -24,13 +24,31 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <nav class="nav ms-md-auto flex-column flex-md-row align-items-md-center">
-            <RouterLink class="nav-link fw-semibold fs-lg" to="products">產品介紹</RouterLink>
-            <RouterLink class="nav-link fw-semibold fs-lg" to="aboutUs">關於我們</RouterLink>
-            <RouterLink class="nav-link fw-semibold fs-lg" to="news">最新消息</RouterLink>
+            <RouterLink class="nav-link fw-semibold fs-lg" to="/products">產品介紹</RouterLink>
+            <RouterLink class="nav-link fw-semibold fs-lg" to="/aboutUs">關於我們</RouterLink>
+            <RouterLink class="nav-link fw-semibold fs-lg" to="/news">最新消息</RouterLink>
             <RouterLink class="nav-link fw-semibold fs-lg" to="/dashboard">後臺管理</RouterLink>
+            <RouterLink class="nav-link fw-semibold fs-lg" to="/carts">
+              <div>
+                <span
+                  class="position-absolute top-0 start-100 translate-middle px-2 bg-danger rounded-circle badge z-1"
+                >
+                  {{ cartsLength }}
+                </span>
+                <span class="material-symbols-outlined"> shopping_cart </span>
+              </div>
+            </RouterLink>
           </nav>
         </div>
       </div>
     </nav>
   </header>
 </template>
+
+<script>
+import { RouterLink } from 'vue-router';
+
+export default {
+  props: ['cartsLength'],
+};
+</script>

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import useFetch from '@/composable/useFetch';
-import type { Order } from '@/interface/order';
+import type { Order, BuyerInfo } from '@/interface/order';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
 
@@ -29,8 +29,9 @@ const orderStore = defineStore('orders', {
       try {
         const apiPath = `v2/api/${path}/order/${id}`;
         const { data } = await useFetch(apiPath, 'get');
+        return data;
       } catch (err) {
-        console.log(err);
+        return false;
       }
     },
     async deleteOrder(id: string) {
@@ -49,6 +50,16 @@ const orderStore = defineStore('orders', {
         if (data.success) this.getOrders('admin');
       } catch (err) {
         console.log(err);
+      }
+    },
+    // client post order
+    async pushOrder(buyerInfo: BuyerInfo) {
+      try {
+        const apiPath = `v2/api/${path}/order`;
+        const { data } = await useFetch(apiPath, 'post', true, { data: buyerInfo });
+        return data;
+      } catch (err) {
+        return false;
       }
     },
   },

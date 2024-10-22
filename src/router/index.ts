@@ -10,6 +10,11 @@ const router = createRouter({
       name: 'login',
       component: () => import('../views/AdminLogin.vue'),
     },
+    {
+      path: '/NotFound',
+      name: 'not_found',
+      component: () => import('../views/NotFound.vue'),
+    },
     // frontend
     {
       path: '/',
@@ -32,6 +37,11 @@ const router = createRouter({
           component: () => import('../views/Client/ProductsView.vue'),
         },
         {
+          path: 'product/:id',
+          name: 'productDetail',
+          component: () => import('../views/Client/ProductDetail.vue'),
+        },
+        {
           path: 'news',
           name: 'news',
           component: () => import('../views/Client/NewsView.vue'),
@@ -40,6 +50,21 @@ const router = createRouter({
           path: 'news/:id',
           name: 'newDetail',
           component: () => import('../views/Client/NewDetail.vue'),
+        },
+        {
+          path: 'carts',
+          name: 'carts',
+          component: () => import('../views/Client/CartView.vue'),
+        },
+        {
+          path: 'order',
+          name: 'order',
+          component: () => import('../views/Client/OrderView.vue'),
+        },
+        {
+          path: 'order/:id',
+          name: 'success',
+          component: () => import('../views/Client/OrderSuccess.vue'),
         },
       ],
     },

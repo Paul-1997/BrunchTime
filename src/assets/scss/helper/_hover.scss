@@ -8,3 +8,11 @@
     background-color: $color;
   }
 }
+
+// $percentages : '10,20,25,50,60,75,80,90';
+
+// @each $p in $percentages{
+//   .hover-darken-#{$p}:hover{
+//     filter: brightness($p);
+//   }
+// }

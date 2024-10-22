@@ -1,0 +1,10 @@
+.banner {
+  align-content: center;
+  padding-block: 144px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 60% center;
+  @media (width < 768px) {
+    padding-block: 72px;
+  }
+}

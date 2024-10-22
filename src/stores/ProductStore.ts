@@ -13,10 +13,12 @@ const productStore = defineStore('products', {
     };
   },
   actions: {
-    async getProducts(from: 'admin' | 'custom', page: number = 0) {
+    async getProducts(from: 'admin' | 'custom', page: number = 0, category: string = '') {
       try {
         let apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}products`;
         if (page > 0) apiPath += `?page=${page}`;
+        if (category !== '') apiPath += page > 0 ? `&category=${category}` : `?category=${category}`;
+        console.log(apiPath);
         const { data } = await useFetch(apiPath, 'get', from === 'admin');
         this.productList = data.products;
         this.pagination = data.pagination;

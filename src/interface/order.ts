@@ -33,4 +33,15 @@ interface Order {
   message?: string;
 }
 
-export type { Order, ProductItem, Products };
+// 用戶訂單結帳結構
+interface BuyerInfo {
+  user: {
+    name: string;
+    email: string;
+    tel: string | number;
+    address: string;
+  };
+  message: string;
+}
+
+export type { Order, ProductItem, Products, BuyerInfo };

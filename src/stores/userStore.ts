@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import useFetch from '@/composable/useFetch.ts';
-import useAlert from '@/composable/useAlert.ts';
+import useFetch from '@/composable/useFetch';
+import useAlert from '@/composable/useAlert';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import type { Admin } from '@/interface/Admin.ts';
+import type { Admin } from '@/interface/Admin';
 
 const userStore = defineStore('user', {
   actions: {
