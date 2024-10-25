@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
+import { errorAlert } from '@/composable/useAlert';
 import useFetch from '@/composable/useFetch';
-import useAlert from '@/composable/useAlert';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import type { Admin } from '@/interface/Admin';
@@ -18,15 +18,9 @@ const userStore = defineStore('user', {
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
           const { message } = error.response.data as { success: boolean; message: string };
-          const result = await useAlert({
-            title: message,
-            icon: 'error',
-            allowOutsideClick: false,
-          });
 
-          if (result.isConfirmed) {
-            this.$router.push('/login');
-          }
+          const result = await errorAlert(message);
+          if (result.isConfirmed) this.$router.push('/login');
         }
       }
     },
@@ -35,7 +29,7 @@ const userStore = defineStore('user', {
         const { data } = await useFetch('v2/logout', 'post', true, {});
         if (data) this.$router.push('/');
       } catch (err) {
-        useAlert({ title: '伺服器出問題了' });
+        errorAlert('伺服器出問題了');
       }
     },
   },

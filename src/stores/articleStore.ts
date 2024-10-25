@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 import useFetch from '@/composable/useFetch';
+import { errorAlert, toast } from '@/composable/useAlert';
+import axios from 'axios';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
 const articleStore = defineStore('articles', {
@@ -17,47 +19,46 @@ const articleStore = defineStore('articles', {
         this.articleList = data.articles;
         this.pagination = data.pagination;
       } catch (err) {
-        console.log(err);
+        errorAlert();
       }
     },
-    async getAllProducts(from: 'admin' | 'custom') {
+    async getSingleArticle(id: string) {
       try {
-        const apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}products/all`;
-        const { data } = await useFetch(apiPath, 'get', from === 'admin');
-        return data;
-      } catch (err) {
-        console.log(err);
-        return false;
-      }
-    },
-    async getSingleProduct(id: string) {
-      try {
-        const apiPath = `v2/api/${path}/product/${id}`;
+        const apiPath = `v2/api/${path}/article/${id}`;
         const { data } = await useFetch(apiPath, 'get');
         return data;
       } catch (err) {
-        console.log(err);
+        errorAlert();
         return false;
       }
     },
-    async deleteProduct(id: string) {
+    async deleteArticle(id: string) {
       try {
-        const apiPath = `v2/api/${path}/admin/product/${id}`;
-        const { data } = await useFetch(apiPath, 'get', true);
-        return data;
+        const apiPath = `v2/api/${path}/admin/article/${id}`;
+        const { data } = await useFetch(apiPath, 'delete', true);
+        if (data.success) {
+          toast('文章已刪除');
+          this.getArticles('admin');
+        }
       } catch (err) {
-        console.log(err);
-        return false;
+        if (axios.isAxiosError(err)) {
+          errorAlert(err.response?.data.message || '錯誤!');
+        }
       }
     },
-    async updateProducts(product: object) {
+    async updateArticle(article: object) {
       try {
-        const apiPath = product.id ? `v2/api/${path}/admin/product/${product.id}` : `v2/api/${path}/admin/product`;
-        const { data } = await useFetch(apiPath, 'get', true, product);
-        return data;
+        const apiPath = article.id ? `v2/api/${path}/admin/article/${article.id}` : `v2/api/${path}/admin/product`;
+        const method = article.id ? 'put' : 'post';
+        const { data } = await useFetch(apiPath, method, true, article);
+        if (data.success) {
+          toast(method === 'put' ? '文章已更新' : '文章已建立');
+          this.getArticles('admin');
+        }
       } catch (err) {
-        console.log(err);
-        return false;
+        if (axios.isAxiosError(err)) {
+          errorAlert(err.response?.data.message || '錯誤!');
+        }
       }
     },
   },

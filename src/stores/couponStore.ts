@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import useFetch from '@/composable/useFetch';
 import type Coupon from '@/interface/coupon';
+import { errorAlert, toast } from '@/composable/useAlert';
+import axios from 'axios';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
 const couponStore = defineStore('coupons', {
@@ -19,16 +21,21 @@ const couponStore = defineStore('coupons', {
         this.couponList = data.coupons;
         this.pagination = data.pagination;
       } catch (err) {
-        console.log(err);
+        errorAlert();
       }
     },
     async deleteCoupon(id: string) {
       try {
         const apiPath = `v2/api/${path}/admin/coupon/${id}`;
         const { data } = await useFetch(apiPath, 'delete', true);
-        if (data.success) this.getCoupons();
+        if (data.success) {
+          toast(data.message);
+          this.getCoupons();
+        }
       } catch (err) {
-        console.log(err);
+        if (axios.isAxiosError(err)) {
+          errorAlert(err.response?.data.message || '錯誤!');
+        }
       }
     },
     async updateCoupons(coupon: Coupon) {
@@ -36,9 +43,14 @@ const couponStore = defineStore('coupons', {
         const apiPath = coupon.id ? `v2/api/${path}/admin/coupon/${coupon.id}` : `v2/api/${path}/admin/Coupon`;
         const method = coupon.id ? 'put' : 'post';
         const { data } = await useFetch(apiPath, method, true, { data: coupon });
-        if (data.success) this.getCoupons();
+        if (data.success) {
+          toast(data.message);
+          this.getCoupons();
+        }
       } catch (err) {
-        console.log(err);
+        if (axios.isAxiosError(err)) {
+          errorAlert(err.response?.data.message || '錯誤!');
+        }
       }
     },
   },

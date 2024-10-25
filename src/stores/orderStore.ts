@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 import useFetch from '@/composable/useFetch';
+import { errorAlert, toast } from '@/composable/useAlert';
+import axios from 'axios';
 import type { Order, BuyerInfo } from '@/interface/order';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
@@ -22,7 +24,7 @@ const orderStore = defineStore('orders', {
           this.pagination = data.pagination;
         }
       } catch (err) {
-        console.log(err);
+        errorAlert('出錯了!');
       }
     },
     async getSingleOrder(id: string) {
@@ -31,25 +33,36 @@ const orderStore = defineStore('orders', {
         const { data } = await useFetch(apiPath, 'get');
         return data;
       } catch (err) {
+        errorAlert('發生未知錯誤');
         return false;
       }
     },
     async deleteOrder(id: string) {
       try {
-        const apiPath = `v2/api/${path}/admin/product/${id}`;
-        const { data } = await useFetch(apiPath, 'get', true);
-        if (data.success) this.getOrders('admin');
+        const apiPath = `v2/api/${path}/admin/order/${id}`;
+        const { data } = await useFetch(apiPath, 'delete', true);
+        if (data.success) {
+          toast(data.message);
+          this.getOrders('admin');
+        }
       } catch (err) {
-        console.log(err);
+        if (axios.isAxiosError(err)) {
+          errorAlert(err.response?.data.message || '錯誤!');
+        }
       }
     },
     async updateOrder(order: Order) {
       try {
         const apiPath = `v2/api/${path}/admin/order/${order.id}`;
         const { data } = await useFetch(apiPath, 'put', true, { data: order });
-        if (data.success) this.getOrders('admin');
+        if (data.success) {
+          toast(data.message);
+          this.getOrders('admin');
+        }
       } catch (err) {
-        console.log(err);
+        if (axios.isAxiosError(err)) {
+          errorAlert(err.response?.data.message || '錯誤!');
+        }
       }
     },
     // client post order
