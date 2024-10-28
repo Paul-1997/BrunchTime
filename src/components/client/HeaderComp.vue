@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-primary">
+  <header class="bg-primary position-sticky top-0 z-2">
     <!-- coupon -->
     <div class="alert alert-info py-1 mb-0 text-center">
       <span class="me-5">限時優惠，套餐系列憑此優惠碼享95折優惠 優惠碼: happyBreakfast</span>
@@ -27,7 +27,6 @@
             <RouterLink class="nav-link fw-semibold fs-lg" to="/products">產品介紹</RouterLink>
             <RouterLink class="nav-link fw-semibold fs-lg" to="/aboutUs">關於我們</RouterLink>
             <RouterLink class="nav-link fw-semibold fs-lg" to="/news">最新消息</RouterLink>
-            <RouterLink class="nav-link fw-semibold fs-lg" to="/dashboard">後臺管理</RouterLink>
             <RouterLink class="nav-link fw-semibold fs-lg" to="/carts">
               <div>
                 <span
@@ -46,8 +45,6 @@
 </template>
 
 <script>
-import { RouterLink } from 'vue-router';
-
 export default {
   props: ['cartsLength'],
 };

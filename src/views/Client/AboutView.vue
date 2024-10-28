@@ -27,6 +27,7 @@
         <li class="mb-2">店家位置: 新北市板橋區漢生西路153號</li>
         <li class="mb-2">營業時間: 07:30 - 14:30 (休息另行通知)</li>
         <li class="mb-2">連絡電話: 02-12345678</li>
+        <li class="mb-2">連絡信箱: BrunchTime@mail.com</li>
       </ul>
       <div class="storeMap d-flex justify-content-center">
         <iframe

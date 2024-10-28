@@ -53,8 +53,8 @@
 
 <script lang="ts">
 import { mapActions } from 'pinia';
-import userStore from '@/stores/userStore.ts';
-import type { Admin } from '@/interface/Admin.ts';
+import userStore from '@/stores/userStore';
+import type { Admin } from '@/interface/Admin';
 
 export default {
   data() {

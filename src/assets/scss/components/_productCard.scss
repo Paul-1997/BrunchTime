@@ -1,6 +1,10 @@
 
 .product-card {
-  height: 360px;
+  min-height: 360px;
+
+  .card-img-top{
+    object-fit: fill;
+  }
 }
 .card-img-wrap{
   &:hover{
@@ -15,4 +19,12 @@
 
 .addCart-btn:hover{
   filter: brightness(95%);
+}
+// 避免過度變形
+@media (400px < width < 768px) {
+  .product-card {
+    img{
+      height: 360px;
+    }
+  }
 }

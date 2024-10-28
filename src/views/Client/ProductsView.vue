@@ -4,7 +4,8 @@
       <div class="row py-lg-lg py-md-10 py-6">
         <!-- product List -->
         <div class="col-md-3 d-none d-md-block">
-          <nav class="position-sticky top-0">
+          <!-- header 70px -->
+          <nav class="position-sticky" style="top: 70px">
             <h4 class="mb-1 border-accent border-bottom border-4 fw-semibold fs-2xl text-secondary">產品列表</h4>
             <ul style="background-color: var(--bs-gray-100)">
               <li

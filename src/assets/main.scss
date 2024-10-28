@@ -8,10 +8,13 @@
 @import './scss/helper/transition.scss';
 @import './scss/helper/cursor';
 @import './scss/helper/hover';
+@import './scss/helper/imgSquare';
 
 @import './scss/components/productCard';
 @import './scss/components/banner';
 @import './scss/components/carts';
+@import './scss/components/scrollBtn';
 
 //animation.css
 @import 'animate.css';
+@import 'swiper/css';

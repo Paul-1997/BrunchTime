@@ -1,0 +1,38 @@
+.scrollToTopBtn{
+  display: grid;
+  place-content: center;
+
+  position: fixed;
+  inset: auto 40px 20px auto;
+  z-index: 10;
+
+  width: 4ch;
+  aspect-ratio: 1;
+  border-radius: 100vw;
+
+  animation-name: vanish;
+  animation-timeline: scroll();
+  user-select: none;
+}
+
+.scrollToTopBtn:hover span{
+  animation: floating 1s infinite backwards;
+}
+
+@keyframes floating {
+  from{
+    transform: translateY(5%);
+  }
+  to{
+    transform: translateY(-15%);
+  }
+}
+
+@keyframes vanish {
+  from{
+    opacity: 0;
+  }
+  50%{
+    opacity: 1;
+  }
+}

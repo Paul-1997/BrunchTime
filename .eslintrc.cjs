@@ -29,7 +29,7 @@ module.exports = {
       'error',
       {
         code: 200,
-        ignorePattern: '^<.*>$',
+        ignorePattern: '^<.*>$ || <path\\s.*d="([^"]*)"',
       },
     ],
     'prettier/prettier': [
