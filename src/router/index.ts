@@ -85,7 +85,7 @@ const router = createRouter({
         },
         {
           path: 'articles',
-          component: () => import('../views/Dashboard/AdminArticlesView.vue'),
+          component: () => import('../views/Dashboard/AdminNewsView.vue'),
         },
         {
           path: 'Orders',

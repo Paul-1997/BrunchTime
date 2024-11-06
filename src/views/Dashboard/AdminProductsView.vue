@@ -96,7 +96,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(productStore, ['getAllProducts', 'getProducts', 'updateProducts', 'deleteProduct']),
+    ...mapActions(productStore, ['getProducts', 'updateProducts', 'deleteProduct']),
     async getNewProduct(page: number) {
       await this.getProducts('admin', page);
     },

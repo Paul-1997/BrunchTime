@@ -14,7 +14,7 @@ const userStore = defineStore('user', {
     },
     async checkLogin() {
       try {
-        const { data } = await useFetch('v2/api/user/check', 'post', true, {});
+        await useFetch('v2/api/user/check', 'post', true, {});
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
           const { message } = error.response.data as { success: boolean; message: string };

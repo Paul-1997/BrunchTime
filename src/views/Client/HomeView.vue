@@ -3,7 +3,11 @@
   <section
     id="banner"
     class="banner align-content-center"
-    style="background-image: url('https://cdn.pixabay.com/photo/2014/08/21/03/07/scrambled-eggs-423066_640.jpg')"
+    style="
+      background-image: url('https://cdn.pixabay.com/photo/2014/08/21/03/07/scrambled-eggs-423066_640.jpg');
+      background-attachment: fixed;
+      padding-block: 30vh;
+    "
   >
     <div class="container banner__slogan">
       <h2 class="banner__slogan__title fw-bold fs-3xl mb-4 text-white">BrunchTime 食晨已到</h2>
@@ -15,7 +19,7 @@
     </div>
   </section>
   <!-- weApply -->
-  <section class="bg-accent bg-opacity-75">
+  <section class="bg-accent bg-opacity-50">
     <div class="container py-8 py-lg-10">
       <h2 class="fw-bold text-secondary text-center fs-3xl lh-1 mb-6 mb-lg-10">我們提供</h2>
       <ul class="d-flex align-items-center justify-content-around gap-4 rowgap-4 flex-wrap">
@@ -35,24 +39,31 @@
     </div>
   </section>
   <!-- news -->
-  <section class="container-field py-8 py-lg-10">
-    <div class="row">
-      <div class="col-6">
-        <img src="/public/service.png" alt="" />
-      </div>
-      <div class="col-6">
-        <h2 class="fw-bold text-secondary text-center fs-3xl lh-1 mb-6 mb-lg-10">最新消息</h2>
+  <section id="newsSection" class="bg-News">
+    <div class="container py-8 py-lg-10">
+      <h2 class="fw-bold text-secondary text-center fs-3xl lh-1 mb-6 mb-lg-10">最新公告</h2>
+      <ul class="mx-auto col-lg-6 mb-6">
+        <li v-for="list in orderedNews" :key="list.date" class="news fs-xl mb-5 text-neutral-dark">
+          <time :datetime="list.date">{{ list.date }}</time>
+          <p v-html="list.contentHtml"></p>
+        </li>
+      </ul>
+      <div class="text-center">
+        <button type="button" class="btn btn-primary text-secondary">
+          <RouterLink to="/news">更多資訊</RouterLink>
+        </button>
       </div>
     </div>
   </section>
   <!-- recommend_food -->
-  <section id="recommend_Product" class="bg-primary bg-opacity-50">
+  <section id="recommend_Product" class="bg-opacity-25 bg-primary">
     <div class="container py-8 py-lg-10">
       <h2 class="fw-bold text-secondary text-center fs-3xl lh-1 mb-6 mb-lg-10">精選推薦</h2>
       <swiper
         :slidesPerView="1"
         :initialSlide="4"
         :spaceBetween="10"
+        :autoplay="{ delay: 3000, disableOnInteraction: false }"
         :loop="true"
         :pagination="{
           clickable: true,
@@ -84,12 +95,12 @@
 </template>
 
 <script lang="ts">
-import type Swiper from 'swiper';
 import { Swiper as swiper, SwiperSlide } from 'swiper/vue';
 import { Autoplay, Pagination } from 'swiper/modules';
 import ProductCard from '@/components/client/ProductCard.vue';
 import { mapActions, mapState } from 'pinia';
 import productStore from '@/stores/productStore';
+import newsStore from '@/stores/newsStore';
 
 export default {
   emits: ['updateCart'],
@@ -109,6 +120,7 @@ export default {
   },
   computed: {
     ...mapState(productStore, ['productList']),
+    ...mapState(newsStore, ['orderedNews']),
   },
   async mounted() {
     this.getProducts('custom');
@@ -119,5 +131,34 @@ export default {
 <style scoped>
 .banner__slogan__title {
   text-shadow: 1px 1px 0 currentColor;
+}
+.news {
+  border-style: solid;
+  border-width: 4px 0;
+  border-color: cyan;
+}
+.bg-News {
+  &::after,
+  &::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 270px;
+  }
+  &::before {
+    left: 0;
+    background-image: url('/public/bg-sanwich.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+  &::after {
+    top: 0;
+    right: 0;
+    background-image: url('/public/bg-burger.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
 }
 </style>

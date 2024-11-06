@@ -2,8 +2,10 @@ import { defineStore } from 'pinia';
 import useFetch from '@/composable/useFetch';
 import { errorAlert, toast } from '@/composable/useAlert';
 import axios from 'axios';
+import type Article from '@/interface/news';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
+
 const articleStore = defineStore('articles', {
   state() {
     return {
@@ -46,9 +48,9 @@ const articleStore = defineStore('articles', {
         }
       }
     },
-    async updateArticle(article: object) {
+    async updateArticle(article: Article) {
       try {
-        const apiPath = article.id ? `v2/api/${path}/admin/article/${article.id}` : `v2/api/${path}/admin/product`;
+        const apiPath = article.id ? `v2/api/${path}/admin/article/${article.id}` : `v2/api/${path}/admin/article`;
         const method = article.id ? 'put' : 'post';
         const { data } = await useFetch(apiPath, method, true, article);
         if (data.success) {
