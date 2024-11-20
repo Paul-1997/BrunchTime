@@ -23,18 +23,18 @@
             @click="getEditCoupon(coupon)"
           >
             <div class="d-flex flex-wrap align-items-center gap-2">
+              <p class="fs-xl fw-semibold">{{ coupon.title }}</p>
               <span class="badge" :class="coupon.is_enabled ? 'bg-success' : 'bg-neutral'">
                 {{ coupon.is_enabled ? '已啟用' : '未啟用' }}
               </span>
               <span class="badge bg-danger" v-if="isDateExpired(coupon.due_date)"> 已過期 </span>
-              <p class="fs-xl fw-semibold">{{ coupon.title }}</p>
             </div>
             <div class="fs-sm text-neutral-dark">
               <p>{{ formatDate(coupon.due_date) }}</p>
               <p>剩餘數量: {{ coupon.num }}</p>
             </div>
             <div
-              class="position-absolute btn-close"
+              class="position-absolute btn-close bg-neutral p-1 rounded-circle"
               style="top: -0.5rem; right: -0.5rem"
               @click.stop="doDeleteCoupon(coupon)"
             ></div>

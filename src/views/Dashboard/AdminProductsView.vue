@@ -33,7 +33,9 @@
           </div>
           <div class="badge bg-secondary d-none d-md-inline">{{ product.category }}</div>
           <div class="col-3 fs-md-lg fs-lg-xl">{{ product.title }}</div>
-          <div>{{ product.price }} / {{ product.unit }}</div>
+          <div>
+            <span class="fs-lg">{{ product.price }}</span> / {{ product.unit }}
+          </div>
           <div class="ms-auto badge" :class="product.is_enabled ? 'bg-success' : 'bg-neutral'">
             {{ product.is_enabled ? '已啟用' : '未啟用' }}
           </div>

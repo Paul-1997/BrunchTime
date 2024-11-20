@@ -66,13 +66,14 @@
               >
             </div>
             <h3 class="fs-xl fw-semibold border-bottom mb-3">訂購項目</h3>
-            <table class="table table-striped align-middle">
+            <table class="table table-hover align-middle">
               <thead>
                 <tr>
                   <th scope="col">產品</th>
                   <th scope="col">單價</th>
                   <th scope="col">數量</th>
                   <th scope="col">總計</th>
+                  <th scope="col"></th>
                 </tr>
               </thead>
               <tbody>
@@ -116,9 +117,10 @@
                     </select>
                   </td>
                   <td>${{ product.final_total }}</td>
+                  <td><button class="btn btn-danger px-2 py-0" @click="removeOrderItem(product.id)">X</button></td>
                 </tr>
                 <tr>
-                  <td colspan="4">
+                  <td colspan="5">
                     <button
                       class="mx-auto d-flex align-item-center justify-content-center btn text-neutral border-bottom"
                       type="button"
@@ -145,28 +147,107 @@
             </table>
             <div class="text-end fs-lg">總計金額$ {{ deepCloneOrder.total }} 元</div>
             <h3 class="fs-xl fw-semibold border-bottom mb-3">訂購人資訊</h3>
-            <div class="mb-3">
-              <label for="editOrderUserName" class="form-label">訂購人名稱 </label>
-              <input type="text" class="form-control" v-model="deepCloneOrder.user.name" id="editOrderUserName" />
-            </div>
-            <div class="mb-3">
-              <label for="editOrderUserTel" class="form-label">訂購人電話 </label>
-              <input type="text" class="form-control" v-model="deepCloneOrder.user.tel" id="editOrderUserTel" />
-            </div>
-            <div class="mb-3">
-              <label for="editOrderUserEmail" class="form-label">訂購人信箱 </label>
-              <input type="text" class="form-control" v-model="deepCloneOrder.user.email" id="editOrderUserEmail" />
-            </div>
-            <div class="mb-3">
-              <label for="editOrderUserAddress" class="form-label">訂購人地址 </label>
-              <input type="text" class="form-control" v-model="deepCloneOrder.user.address" id="editOrderUserAddress" />
-            </div>
-            <div class="mb-3">
-              <h3 class="fs-xl fw-semibold">訂單備註</h3>
-              <p class="p-1 border border-neutral-light text-neutral bg-mute rounded" style="min-height: 100px">
-                {{ order.message ? order.message : '無備註內容' }}
-              </p>
-            </div>
+            <VeeForm
+              ref="form"
+              v-slot="{ errors }"
+              @submit="updateOrder"
+              :initialValues="{
+                orderUserName: deepCloneOrder.user.name,
+                orderUserEmail: deepCloneOrder.user.email,
+                orderUserTel: deepCloneOrder.user.tel,
+                orderUserAddress: deepCloneOrder.user.address,
+              }"
+              validateOnMount="true"
+            >
+              <div class="mb-3">
+                <label for="editOrderUserName" class="form-label">訂購人名稱 </label>
+                <VeeField
+                  v-model="deepCloneOrder.user.name"
+                  v-slot="{ field, meta }"
+                  type="text"
+                  rules="required"
+                  name="OrderUserName"
+                  :value="deepCloneOrder.user.name"
+                  label="訂購人名稱"
+                >
+                  <input
+                    id="editOrderUserName"
+                    v-bind="field"
+                    class="form-control"
+                    :class="{ 'is-invalid': errors['OrderUserName'], 'is-valid': meta.valid && meta.touched }"
+                  />
+                </VeeField>
+                <VeeErrorMessage name="OrderUserName" class="Vee__errMsg" />
+              </div>
+              <div class="mb-3">
+                <label for="editOrderUserTel" class="form-label">訂購人電話 </label>
+                <VeeField
+                  v-model.number="deepCloneOrder.user.tel"
+                  v-slot="{ field, meta }"
+                  type="number"
+                  rules="numeric | required"
+                  name="OrderUserTel"
+                  :value="deepCloneOrder.user.tel"
+                  label="訂購人電話"
+                >
+                  <input
+                    id="editOrderUserTel"
+                    inputmode="numeric"
+                    v-bind="field"
+                    class="form-control"
+                    :class="{ 'is-invalid': errors['OrderUserName'], 'is-valid': meta.valid && meta.touched }"
+                  />
+                </VeeField>
+                <VeeErrorMessage name="OrderUserTel" class="Vee__errMsg" />
+              </div>
+              <div class="mb-3">
+                <label for="editOrderUserEmail" class="form-label">訂購人信箱 </label>
+                <VeeField
+                  v-model="deepCloneOrder.user.email"
+                  v-slot="{ field, meta }"
+                  type="email"
+                  rules="email | required"
+                  name="OrderUserEmail"
+                  :value="deepCloneOrder.user.email"
+                  label="訂購人信箱"
+                >
+                  <input
+                    id="editOrderUserEmail"
+                    v-bind="field"
+                    class="form-control"
+                    :class="{ 'is-invalid': errors['OrderUserName'], 'is-valid': meta.valid && meta.touched }"
+                  />
+                </VeeField>
+                <VeeErrorMessage name="OrderUserEmail" class="Vee__errMsg" />
+              </div>
+              <div class="mb-3">
+                <label for="editOrderUserAddress" class="form-label">訂購人地址 </label>
+                <VeeField
+                  v-model="deepCloneOrder.user.address"
+                  v-slot="{ field, meta }"
+                  type="text"
+                  rules="required"
+                  name="OrderUserAddress"
+                  :value="deepCloneOrder.user.address"
+                  label="訂購人電話"
+                >
+                  <input
+                    id="editOrderUserAddress"
+                    inputmode="numeric"
+                    v-bind="field"
+                    class="form-control"
+                    :class="{ 'is-invalid': errors['OrderUserName'], 'is-valid': meta.valid && meta.touched }"
+                  />
+                </VeeField>
+                <VeeErrorMessage name="OrderUserAddress" class="Vee__errMsg" />
+              </div>
+              <div class="mb-3">
+                <h3 class="fs-xl fw-semibold">訂單備註</h3>
+                <p class="p-1 border border-neutral-light text-neutral bg-mute rounded" style="min-height: 100px">
+                  {{ order.message ? order.message : '無備註內容' }}
+                </p>
+              </div>
+            </VeeForm>
           </div>
           <div class="modal-footer py-2">
             <button type="button" class="btn px-6 py-1 btn-outline-neutral" @click="closeModal">取消</button>
@@ -208,6 +289,16 @@ export default {
       this.modal!.show();
     },
     closeModal() {
+      this.deepCloneOrder = JSON.parse(JSON.stringify(this.order));
+      (this.$refs.form as any).resetForm({
+        value: {
+          orderUserName: this.deepCloneOrder.user.name,
+          orderUserEmail: this.deepCloneOrder.user.email,
+          orderUserTel: this.deepCloneOrder.user.tel,
+          orderUserAddress: this.deepCloneOrder.user.address,
+        },
+        touched: false,
+      });
       this.modal!.hide();
     },
     updateItem(item: Product, targetId: string) {
@@ -246,6 +337,12 @@ export default {
         total: price * 1,
       };
       this.deepCloneOrder.products[uniqueId] = obj;
+      this.updateTotal();
+    },
+    removeOrderItem(id: string) {
+      this.deepCloneOrder.products = Object.fromEntries(
+        Object.entries(this.deepCloneOrder.products).filter(([key]) => key !== id),
+      );
       this.updateTotal();
     },
     updateOrder() {

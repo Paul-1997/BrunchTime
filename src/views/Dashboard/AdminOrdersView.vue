@@ -1,32 +1,58 @@
 <template>
   <div class="container mx-auto">
     <h2 class="fw-bold fs-4xl text-center text-secondary my-10">訂單管理</h2>
-    <div class="toolbar mb-3 d-flex align-items-center gap-3">
-      <button
-        type="button"
-        :class="currFilter === '全部' ? 'btn-primary' : 'btn-neutral-light'"
-        class="btn border-0 px-4 py-1"
-        @click="currFilter = '全部'"
-      >
-        全部
-      </button>
-      <button
-        type="button"
-        :class="currFilter === '已付款' ? 'btn-primary' : 'btn-neutral-light'"
-        class="btn border-0 px-4 py-1"
-        @click="currFilter = '已付款'"
-      >
-        已付款
-      </button>
-      <button
-        type="button"
-        :class="currFilter === '未付款' ? 'btn-primary' : 'btn-neutral-light'"
-        class="btn border-0 px-4 py-1"
-        @click="currFilter = '未付款'"
-      >
-        未付款
-      </button>
+    <div class="toolbar mb-3">
+      <div class="d-flex flex-wrap align-items-center justify-content-md-between">
+        <div class="d-flex align-items-center gap-3">
+          <button
+            type="button"
+            :class="currFilter === '全部' ? 'btn-primary' : 'btn-neutral-light'"
+            class="btn border-0 px-4 py-1"
+            @click="currFilter = '全部'"
+          >
+            全部
+          </button>
+          <button
+            type="button"
+            :class="currFilter === '已付款' ? 'btn-primary' : 'btn-neutral-light'"
+            class="btn border-0 px-4 py-1"
+            @click="currFilter = '已付款'"
+          >
+            已付款
+          </button>
+          <button
+            type="button"
+            :class="currFilter === '未付款' ? 'btn-primary' : 'btn-neutral-light'"
+            class="btn border-0 px-4 py-1"
+            @click="currFilter = '未付款'"
+          >
+            未付款
+          </button>
+        </div>
+        <div class="dropdown">
+          <button
+            class="btn btn-sm btn-outline-neutral dropdown-toggle"
+            type="button"
+            id="dropdown__OrderSorter"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {{ OrderSortBy }}
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdown__OrderSorter">
+            <li
+              class="dropdown-item cursor-pointer"
+              v-for="option in ['最新', '最舊']"
+              :key="option"
+              @click="OrderSortBy = option"
+            >
+              {{ option }}
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
+
     <div class="mb-10">
       <div class="accordion" id="adminOrderList">
         <template v-for="(order, i) in finalOrder" :key="order.id">
@@ -70,7 +96,7 @@
                   </span>
                 </div>
                 <h3 class="mb-3 fs-xl border-bottom">訂單資訊</h3>
-                <div class="mb-5">
+                <div class="mb-5 d-flex flex-wrap gap-4">
                   <div
                     v-for="product in order.products"
                     :key="product.id"
@@ -82,12 +108,12 @@
                       {{ product.product.title }}
                       <span class="ms-1">{{ product.qty }}({{ product.product.unit }})</span>
                     </p>
-                    <p class="me-2">共{{ product.final_total }}元</p>
+                    <p class="ms-2">共{{ product.final_total }}元</p>
                   </div>
-                  <p class="text-end fw-semibold fs-lg">
-                    總計: <span class="fs-base"> {{ order.total }}</span>
-                  </p>
                 </div>
+                <p class="text-end fw-semibold fs-lg">
+                  總計: <span class="fs-base"> {{ order.total }}</span>
+                </p>
 
                 <h3 class="mb-3 fs-xl border-bottom">訂購人資訊</h3>
                 <ul class="mb-5">
@@ -102,7 +128,11 @@
                 </p>
               </div>
               <div class="accordion-footer px-4 py-2 text-end border-top">
-                <button type="button" class="btn px-6 py-1 bg-danger text-white me-4" @click="getDeleteOrder(order)">
+                <button
+                  type="button"
+                  class="btn px-6 py-1 bg-danger text-white me-4 bg-hover-danger"
+                  @click="getDeleteOrder(order)"
+                >
                   刪除
                 </button>
                 <button type="button" class="btn px-6 py-1 bg-primary bg-hover-accent" @click="editOrder(order)">
@@ -140,6 +170,7 @@ export default {
       tempOrder: {} as Order,
       onEdit: false as boolean,
       currFilter: '全部' as '全部' | '已付款' | '未付款',
+      OrderSortBy: '最新' as string,
     };
   },
   methods: {
@@ -165,11 +196,15 @@ export default {
     ...mapState(orderStore, ['orderList', 'pagination']),
 
     finalOrder() {
-      return [...this.orderList].filter((order) => {
+      const filterOrder = [...this.orderList].filter((order) => {
         if (this.currFilter === '全部') return true;
 
         const isValid = order.is_paid ? '已付款' : '未付款';
         return isValid === this.currFilter;
+      });
+      return filterOrder.sort((a, b) => {
+        if (this.OrderSortBy === '最新') return a.create_at - b.create_at;
+        return b.create_at - a.create_at;
       });
     },
   },

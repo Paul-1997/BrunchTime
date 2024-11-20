@@ -14,7 +14,7 @@ const productStore = defineStore('products', {
     };
   },
   actions: {
-    async getProducts(from: 'admin' | 'custom', page: number = 0, category: string = '') {
+    async getProducts(from: 'admin' | 'custom', page: number = 0, category: string = ''): Promise<void> {
       try {
         let apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}products`;
         if (page > 0) apiPath += `?page=${page}`;
@@ -26,17 +26,19 @@ const productStore = defineStore('products', {
         errorAlert('出錯了!');
       }
     },
-    // async getAllProducts(from: 'admin' | 'custom') {
-    //   try {
-    //     const apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}products/all`;
-    //     const { data } = await useFetch(apiPath, 'get', from === 'admin');
-    //     return data;
-    //   } catch (err) {
-    //     console.log(err);
-    //     return false;
-    //   }
-    // },
-    async getSingleProduct(id: string) {
+    async getAllProducts(from: 'admin' | 'custom'): Promise<Product[] | false> {
+      try {
+        const apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}products/all`;
+        const { data } = await useFetch(apiPath, 'get', from === 'admin');
+        return data;
+      } catch (err) {
+        if (axios.isAxiosError(err)) {
+          errorAlert(err.response?.data.message || '錯誤!');
+        }
+        return false;
+      }
+    },
+    async getSingleProduct(id: string): Promise<void> {
       try {
         const apiPath = `v2/api/${path}/product/${id}`;
         const { data } = await useFetch(apiPath, 'get');
@@ -54,7 +56,7 @@ const productStore = defineStore('products', {
         return false;
       }
     },
-    async deleteProduct(id: string) {
+    async deleteProduct(id: string): Promise<void> {
       try {
         const apiPath = `v2/api/${path}/admin/product/${id}`;
         const { data } = await useFetch(apiPath, 'delete', true);
@@ -68,7 +70,7 @@ const productStore = defineStore('products', {
         }
       }
     },
-    async updateProducts(product: Product) {
+    async updateProducts(product: Product): Promise<void> {
       try {
         const apiPath = product.id ? `v2/api/${path}/admin/product/${product.id}` : `v2/api/${path}/admin/product`;
         const method = product.id ? 'put' : 'post';

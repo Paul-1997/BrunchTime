@@ -10,11 +10,7 @@ const router = createRouter({
       name: 'login',
       component: () => import('../views/AdminLogin.vue'),
     },
-    {
-      path: '/NotFound',
-      name: 'not_found',
-      component: () => import('../views/NotFound.vue'),
-    },
+
     // frontend
     {
       path: '/',
@@ -96,6 +92,17 @@ const router = createRouter({
           component: () => import('../views/Dashboard/AdminCouponsView.vue'),
         },
       ],
+    },
+
+    // not found Redirect
+    {
+      path: '/NotFound',
+      name: 'not_found',
+      component: () => import('../views/NotFound.vue'),
+    },
+    {
+      path: '/:pathMatch(.*)*', // 通配符路由
+      redirect: '/NotFound', // 访问不存在的路径时重定向到 NotFound 页面
     },
   ],
 });

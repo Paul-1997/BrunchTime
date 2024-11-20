@@ -266,6 +266,7 @@ import useDebounce from '@/composable/useDebounce';
 
 export default {
   props: ['product'],
+  emits: ['updateProduct'],
   data() {
     return {
       modal: null as null | bootstrap.Modal,

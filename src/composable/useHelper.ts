@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 export function useHelper() {
   const alertBeforeunload = (event: BeforeUnloadEvent) => {
     event.preventDefault();
