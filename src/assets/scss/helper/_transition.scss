@@ -7,12 +7,15 @@
   transition-timing-function: ease; // 設置過渡的時間函數
   //type
   &-color {
+    transition-duration: .5s;
     transition-property: color, background-color;
   }
   &-size {
+    transition-duration: .5s;
     transition-property: height, width;
   }
   &-transform {
+    transition-duration: .5s;
     transition-property: transform, rotate, scale;
   }
 }

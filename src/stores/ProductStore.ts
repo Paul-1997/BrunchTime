@@ -14,7 +14,7 @@ const productStore = defineStore('products', {
     };
   },
   actions: {
-    async getProducts(from: 'admin' | 'custom', page: number = 0, category: string = ''): Promise<void> {
+    async getProducts(from: 'admin' | 'custom', page: number = 0, category: string = '') {
       try {
         let apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}products`;
         if (page > 0) apiPath += `?page=${page}`;
@@ -38,7 +38,7 @@ const productStore = defineStore('products', {
         return false;
       }
     },
-    async getSingleProduct(id: string): Promise<void> {
+    async getSingleProduct(id: string) {
       try {
         const apiPath = `v2/api/${path}/product/${id}`;
         const { data } = await useFetch(apiPath, 'get');
@@ -56,7 +56,7 @@ const productStore = defineStore('products', {
         return false;
       }
     },
-    async deleteProduct(id: string): Promise<void> {
+    async deleteProduct(id: string) {
       try {
         const apiPath = `v2/api/${path}/admin/product/${id}`;
         const { data } = await useFetch(apiPath, 'delete', true);
@@ -70,7 +70,7 @@ const productStore = defineStore('products', {
         }
       }
     },
-    async updateProducts(product: Product): Promise<void> {
+    async updateProducts(product: Product) {
       try {
         const apiPath = product.id ? `v2/api/${path}/admin/product/${product.id}` : `v2/api/${path}/admin/product`;
         const method = product.id ? 'put' : 'post';

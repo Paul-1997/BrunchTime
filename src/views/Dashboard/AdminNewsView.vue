@@ -22,10 +22,41 @@
       </div>
       <button type="button" class="btn btn-accent" @click="getModal('news')">新增文章</button>
     </div>
-    <div class="row">
-      <div class="col-4"></div>
+    <div class="row justify-content-center gap-6">
+      <template v-for="article in articleList" :key="article.id">
+        <div class="col-md-8 p-3 bg-primary bg-opacity-50 d-flex">
+          <img :src="article.image" alt="文章圖片" style="width: 20%" />
+          <div class="article__content flex-grow-1 mx-3">
+            <p class="article__content__title fw-bold fs-xl">{{ article.title }}</p>
+            <p class="fs-sm ps-2">作者: {{ article.author }}</p>
+            <p class="article__content__description ps-2 text-neutral">{{ article.description }}</p>
+          </div>
+          <div class="article__editTool" style="align-content: center">
+            <div class="button-group">
+              <span
+                class="material-symbols-outlined interactive-button me-md-3 cursor-pointer"
+                @click="getModal('news', article)"
+              >
+                edit
+              </span>
+              <span
+                class="material-symbols-outlined interactive-button cursor-pointer"
+                @click="getModal('delete', article)"
+              >
+                delete
+              </span>
+            </div>
+          </div>
+        </div>
+      </template>
     </div>
-    <NewsModal ref="news" />
+    <NewsModal ref="news" :article="tempArticle" @update-news="updateArticle" />
+    <DeleteModal
+      ref="delete"
+      :title="tempArticle.title!"
+      :target-id="tempArticle.id!"
+      @delete-target="async (id) => await deleteArticle(id)"
+    />
   </div>
 </template>
 
@@ -33,15 +64,18 @@
 import { mapActions, mapState } from 'pinia';
 import News from '@/stores/newsStore';
 import NewsModal from '@/components/Dashboard/NewsModal.vue';
+import DeleteModal from '@/components/Dashboard/DeleteModal.vue';
+import type Article from '@/interface/news';
 
 export default {
   components: {
     NewsModal,
+    DeleteModal,
   },
   data() {
     return {
       orderValue: 'latest',
-      tempArticle: {},
+      tempArticle: {} as Article,
     };
   },
   computed: {
@@ -53,7 +87,7 @@ export default {
       this.tempArticle = { ...data };
       modal.openModal();
     },
-    ...mapActions(News, ['getArticles']),
+    ...mapActions(News, ['getArticles', 'updateArticle', 'deleteArticle']),
   },
   async mounted() {
     await this.getArticles('admin');

@@ -31,37 +31,87 @@
           <span class="fs-xl">總計：</span><span class="fs-2xl fw-bold text-secondary">${{ f_total }}&nbsp;元</span>
         </div>
       </div>
-      <form class="col-lg-5" ref="orderForm">
+      <VeeForm class="col-lg-5" ref="orderForm" as="form" v-slot="{ errors }" @submit="submitOrder">
         <h2 class="fw-bold border-bottom border-neutral">購買人資訊</h2>
         <div class="mb-3">
-          <label for="customName" class="col-form-label fw-bold">購買人姓名</label>
-          <div>
-            <input type="text" class="form-control" id="customName" placeholder="請輸入姓名" v-model="user.name" />
-          </div>
-        </div>
-        <div class="mb-3">
-          <label for="customEmail" class="col-form-label fw-bold">購買人信箱</label>
-          <div>
-            <input type="email" class="form-control" id="customEmail" placeholder="請輸入信箱" v-model="user.email" />
-          </div>
-        </div>
-        <div class="mb-3">
-          <label for="customTel" class="col-form-label fw-bold">購買人電話</label>
-          <div>
-            <input type="tel" class="form-control" id="customTel" placeholder="請輸入電話" v-model="user.tel" />
-          </div>
-        </div>
-        <div class="mb-3">
-          <label for="customAddress" class="col-form-label fw-bold">購買人地址</label>
-          <div>
+          <label for="customName" class="col-form-label fw-bold"><sup style="color: red">*</sup>購買人姓名</label>
+          <VeeField
+            v-model="user.name"
+            v-slot="{ field, meta }"
+            type="text"
+            rules="required"
+            name="Buyer__name"
+            label="購買人姓名"
+          >
             <input
-              type="text"
+              v-bind="field"
+              id="customName"
               class="form-control"
-              id="customAddress"
-              placeholder="請輸入地址"
-              v-model="user.address"
+              :class="{ 'is-invalid': errors['Buyer__name'], 'is-valid': meta.valid && meta.touched }"
+              placeholder="請輸入姓名"
             />
-          </div>
+          </VeeField>
+          <VeeErrorMessage name="Buyer__name" class="Vee__errMsg" />
+        </div>
+        <div class="mb-3">
+          <label for="customEmail" class="col-form-label fw-bold"><sup style="color: red">*</sup>購買人信箱</label>
+          <VeeField
+            v-model="user.email"
+            v-slot="{ field, meta }"
+            type="email"
+            rules="email|required"
+            name="Buyer__email"
+            label="購買人姓名"
+          >
+            <input
+              v-bind="field"
+              id="customEmail"
+              class="form-control"
+              :class="{ 'is-invalid': errors['Buyer__email'], 'is-valid': meta.valid && meta.touched }"
+              placeholder="請輸入信箱"
+            />
+          </VeeField>
+          <VeeErrorMessage name="Buyer__email" class="Vee__errMsg" />
+        </div>
+        <div class="mb-3">
+          <label for="customTel" class="col-form-label fw-bold"><sup style="color: red">*</sup>購買人電話</label>
+          <VeeField
+            v-model="user.tel"
+            v-slot="{ field, meta }"
+            type="number"
+            rules="required|numeric|min:8"
+            name="Buyer__tel"
+            label="購買人電話"
+          >
+            <input
+              v-bind="field"
+              id="customTel"
+              class="form-control"
+              :class="{ 'is-invalid': errors['Buyer__tel'], 'is-valid': meta.valid && meta.touched }"
+              placeholder="請輸入電話"
+            />
+          </VeeField>
+          <VeeErrorMessage name="Buyer__tel" class="Vee__errMsg" />
+        </div>
+        <div class="mb-3">
+          <label for="customAddress" class="col-form-label fw-bold"><sup style="color: red">*</sup>購買人地址</label>
+          <VeeField
+            v-model="user.address"
+            v-slot="{ field, meta }"
+            type="text"
+            rules="required"
+            name="Buyer__address"
+            label="購買人地址"
+          >
+            <input
+              v-bind="field"
+              id="customAddress"
+              class="form-control"
+              :class="{ 'is-invalid': errors['Buyer__address'], 'is-valid': meta.valid && meta.touched }"
+              placeholder="請輸入地址"
+            />
+          </VeeField>
+          <VeeErrorMessage name="Buyer__address" class="Vee__errMsg" />
         </div>
         <div class="mb-8">
           <label for="userMessage" class="form-label fw-bold">備註</label>
@@ -74,8 +124,8 @@
             v-model="message"
           ></textarea>
         </div>
-        <button type="submit" class="d-block btn btn-accent w-50 mx-auto" @click.prevent="submitOrder">送出訂單</button>
-      </form>
+        <button type="submit" class="d-block btn btn-accent w-50 mx-auto">送出訂單</button>
+      </VeeForm>
     </div>
   </div>
 </template>
@@ -111,7 +161,6 @@ export default {
     ...mapActions(cartStore, ['getCarts']),
     async submitOrder() {
       const result = await this.pushOrder({ user: this.user, message: this.message });
-      console.log(result);
       if (result.success) {
         await this.getCarts();
         (this.$refs.orderForm as HTMLFormElement).reset();

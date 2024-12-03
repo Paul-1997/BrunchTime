@@ -15,7 +15,7 @@
   </ol>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   // 根據state調整進度條顏色
   props: ['state'],

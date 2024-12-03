@@ -15,85 +15,137 @@
             <h5 id="orderEditLabel" class="modal-title fw-bold">編輯訂單</h5>
             <button type="button" class="btn-close" @click="closeModal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <div class="mb-3">
-              <label for="editOrderId" class="form-label">訂單編號</label>
-              <input type="text" id="editOrderId" :value="order.id" class="form-control" disabled readonly />
-            </div>
-            <div class="mb-3">
-              <label for="editOrderDate" class="form-label">訂購時間</label>
-              <input
-                type="text"
-                id="editOrderDate"
-                :value="formatDate(order.create_at, true)"
-                class="form-control"
-                disabled
-                readonly
-              />
-            </div>
-            <div class="d-flex align-items-center mb-3">
-              <span class="me-3">付款狀態:</span>
-              <input
-                type="radio"
-                class="btn-check"
-                name="payment_options"
-                id="payment_options1"
-                autocomplete="off"
-                v-model="deepCloneOrder.is_paid"
-                :value="true"
-              />
-              <label
-                class="btn btn-sm me-2"
-                for="payment_options1"
-                :class="deepCloneOrder.is_paid ? 'btn-success' : 'btn-outline-neutral'"
-                >已付款</label
-              >
+          <VeeForm
+            ref="form"
+            v-slot="{ errors }"
+            @submit="updateOrder"
+            :initialValues="{
+              orderUserName: deepCloneOrder.user.name,
+              orderUserEmail: deepCloneOrder.user.email,
+              orderUserTel: deepCloneOrder.user.tel,
+              orderUserAddress: deepCloneOrder.user.address,
+            }"
+            :validateOnMount="true"
+          >
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="editOrderId" class="form-label">訂單編號</label>
+                <input type="text" id="editOrderId" :value="order.id" class="form-control" disabled readonly />
+              </div>
+              <div class="mb-3">
+                <label for="editOrderDate" class="form-label">訂購時間</label>
+                <input
+                  type="text"
+                  id="editOrderDate"
+                  :value="formatDate(order.create_at, true)"
+                  class="form-control"
+                  disabled
+                  readonly
+                />
+              </div>
+              <div class="d-flex align-items-center mb-3">
+                <span class="me-3">付款狀態:</span>
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="payment_options"
+                  id="payment_options1"
+                  autocomplete="off"
+                  v-model="deepCloneOrder.is_paid"
+                  :value="true"
+                />
+                <label
+                  class="btn btn-sm me-2"
+                  for="payment_options1"
+                  :class="deepCloneOrder.is_paid ? 'btn-success' : 'btn-outline-neutral'"
+                  >已付款</label
+                >
 
-              <input
-                type="radio"
-                class="btn-check"
-                name="payment_options"
-                id="payment_options2"
-                autocomplete="off"
-                v-model="deepCloneOrder.is_paid"
-                :value="false"
-              />
-              <label
-                class="btn btn-sm"
-                for="payment_options2"
-                :class="deepCloneOrder.is_paid ? 'btn-outline-neutral' : 'btn-neutral'"
-                >未付款</label
-              >
-            </div>
-            <h3 class="fs-xl fw-semibold border-bottom mb-3">訂購項目</h3>
-            <table class="table table-hover align-middle">
-              <thead>
-                <tr>
-                  <th scope="col">產品</th>
-                  <th scope="col">單價</th>
-                  <th scope="col">數量</th>
-                  <th scope="col">總計</th>
-                  <th scope="col"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="product in deepCloneOrder.products" :key="product.id" :data-id="product.id">
-                  <td class="fw-semibold itemListDropdown">
-                    <div class="form-control p-0 cursor-pointer">
-                      <div
-                        class="d-flex align-items-center dropdown-toggle"
-                        id="itemListDropdown"
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="payment_options"
+                  id="payment_options2"
+                  autocomplete="off"
+                  v-model="deepCloneOrder.is_paid"
+                  :value="false"
+                />
+                <label
+                  class="btn btn-sm"
+                  for="payment_options2"
+                  :class="deepCloneOrder.is_paid ? 'btn-outline-neutral' : 'btn-neutral'"
+                  >未付款</label
+                >
+              </div>
+              <h3 class="fs-xl fw-semibold border-bottom mb-3">訂購項目</h3>
+              <table class="table table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th scope="col">產品</th>
+                    <th scope="col">單價</th>
+                    <th scope="col">數量</th>
+                    <th scope="col">總計</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="product in deepCloneOrder.products" :key="product.id" :data-id="product.id">
+                    <td class="fw-semibold itemListDropdown">
+                      <div class="form-control p-0 cursor-pointer">
+                        <div
+                          class="d-flex align-items-center dropdown-toggle"
+                          id="itemListDropdown"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          <picture style="padding: 0.125rem; flex: 0 0 48px" class="me-1">
+                            <img :src="product.product.imageUrl" alt="" style="aspect-ratio: 1" />
+                          </picture>
+                          <span class="overflow-hidden">{{ product.product.title }}</span>
+                        </div>
+                        <ul class="dropdown-menu" aria-labelledby="itemListDropdown">
+                          <li v-for="item in productItemList" :key="item.id">
+                            <div class="d-flex align-items-center" @click="updateItem(item, product.id)">
+                              <picture style="padding: 0.125rem; flex: 0 0 48px" class="me-1">
+                                <img :src="item.imageUrl" alt="" style="aspect-ratio: 1" />
+                              </picture>
+                              <span class="overflow-hidden">{{ item.title }}</span>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </td>
+                    <td width="48px">
+                      {{ product.product.price }}
+                    </td>
+                    <td>
+                      <select
+                        class="form-select"
+                        @change="updateQty(product.id)"
+                        v-model="product.qty"
+                        style="width: 50px; background-position-x: 28px; padding: 0.25rem"
+                      >
+                        <option :value="i" v-for="i in 20" :key="`qty${i}`">{{ i }}</option>
+                      </select>
+                    </td>
+                    <td>${{ product.final_total }}</td>
+                    <td><button class="btn btn-danger px-2 py-0" @click="removeOrderItem(product.id)">X</button></td>
+                  </tr>
+                  <tr>
+                    <td colspan="5">
+                      <button
+                        class="mx-auto d-flex align-item-center justify-content-center btn text-neutral border-bottom"
+                        type="button"
+                        id="itemListDropdown2"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
+                        role="button"
                       >
-                        <picture style="padding: 0.125rem; flex: 0 0 48px" class="me-1">
-                          <img :src="product.product.imageUrl" alt="" style="aspect-ratio: 1" />
-                        </picture>
-                        <span class="overflow-hidden">{{ product.product.title }}</span>
-                      </div>
-                      <ul class="dropdown-menu" aria-labelledby="itemListDropdown">
+                        <span class="material-symbols-outlined">add_circle</span>新增產品
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="itemListDropdown2">
                         <li v-for="item in productItemList" :key="item.id">
-                          <div class="d-flex align-items-center" @click="updateItem(item, product.id)">
+                          <div class="d-flex align-items-center" @click="addNewItem(item)">
                             <picture style="padding: 0.125rem; flex: 0 0 48px" class="me-1">
                               <img :src="item.imageUrl" alt="" style="aspect-ratio: 1" />
                             </picture>
@@ -101,64 +153,12 @@
                           </div>
                         </li>
                       </ul>
-                    </div>
-                  </td>
-                  <td width="48px">
-                    {{ product.product.price }}
-                  </td>
-                  <td>
-                    <select
-                      class="form-select"
-                      @change="updateQty(product.id)"
-                      v-model="product.qty"
-                      style="width: 50px; background-position-x: 28px; padding: 0.25rem"
-                    >
-                      <option :value="i" v-for="i in 20" :key="`qty${i}`">{{ i }}</option>
-                    </select>
-                  </td>
-                  <td>${{ product.final_total }}</td>
-                  <td><button class="btn btn-danger px-2 py-0" @click="removeOrderItem(product.id)">X</button></td>
-                </tr>
-                <tr>
-                  <td colspan="5">
-                    <button
-                      class="mx-auto d-flex align-item-center justify-content-center btn text-neutral border-bottom"
-                      type="button"
-                      id="itemListDropdown2"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                      role="button"
-                    >
-                      <span class="material-symbols-outlined">add_circle</span>新增產品
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="itemListDropdown2">
-                      <li v-for="item in productItemList" :key="item.id">
-                        <div class="d-flex align-items-center" @click="addNewItem(item)">
-                          <picture style="padding: 0.125rem; flex: 0 0 48px" class="me-1">
-                            <img :src="item.imageUrl" alt="" style="aspect-ratio: 1" />
-                          </picture>
-                          <span class="overflow-hidden">{{ item.title }}</span>
-                        </div>
-                      </li>
-                    </ul>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="text-end fs-lg">總計金額$ {{ deepCloneOrder.total }} 元</div>
-            <h3 class="fs-xl fw-semibold border-bottom mb-3">訂購人資訊</h3>
-            <VeeForm
-              ref="form"
-              v-slot="{ errors }"
-              @submit="updateOrder"
-              :initialValues="{
-                orderUserName: deepCloneOrder.user.name,
-                orderUserEmail: deepCloneOrder.user.email,
-                orderUserTel: deepCloneOrder.user.tel,
-                orderUserAddress: deepCloneOrder.user.address,
-              }"
-              validateOnMount="true"
-            >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-end fs-lg">總計金額$ {{ deepCloneOrder.total }} 元</div>
+              <h3 class="fs-xl fw-semibold border-bottom mb-3">訂購人資訊</h3>
               <div class="mb-3">
                 <label for="editOrderUserName" class="form-label">訂購人名稱 </label>
                 <VeeField
@@ -185,7 +185,7 @@
                   v-model.number="deepCloneOrder.user.tel"
                   v-slot="{ field, meta }"
                   type="number"
-                  rules="numeric | required"
+                  rules="numeric|required"
                   name="OrderUserTel"
                   :value="deepCloneOrder.user.tel"
                   label="訂購人電話"
@@ -206,7 +206,7 @@
                   v-model="deepCloneOrder.user.email"
                   v-slot="{ field, meta }"
                   type="email"
-                  rules="email | required"
+                  rules="email|required"
                   name="OrderUserEmail"
                   :value="deepCloneOrder.user.email"
                   label="訂購人信箱"
@@ -247,12 +247,12 @@
                   {{ order.message ? order.message : '無備註內容' }}
                 </p>
               </div>
-            </VeeForm>
-          </div>
-          <div class="modal-footer py-2">
-            <button type="button" class="btn px-6 py-1 btn-outline-neutral" @click="closeModal">取消</button>
-            <button type="button" class="btn px-6 py-1 btn-success" @click="updateOrder">送出</button>
-          </div>
+            </div>
+            <div class="modal-footer py-2">
+              <button type="button" class="btn px-6 py-1 btn-outline-neutral" @click="closeModal">取消</button>
+              <button type="submit" class="btn px-6 py-1 btn-success">送出</button>
+            </div>
+          </VeeForm>
         </div>
       </div>
     </div>

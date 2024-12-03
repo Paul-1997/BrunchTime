@@ -1,21 +1,20 @@
 <template>
   <!-- banner -->
-  <section
-    id="banner"
-    class="banner align-content-center"
-    style="
-      background-image: url('https://cdn.pixabay.com/photo/2014/08/21/03/07/scrambled-eggs-423066_640.jpg');
-      background-attachment: fixed;
-      padding-block: 30vh;
-    "
-  >
-    <div class="container banner__slogan">
-      <h2 class="banner__slogan__title fw-bold fs-3xl mb-4 text-white">BrunchTime 食晨已到</h2>
-      <p class="fw-semibold fs-xl text-white">
+  <section id="banner" class="banner align-content-center">
+    <div class="banner__slogan container text-white">
+      <h2 class="banner__slogan__title fw-bold fs-3xl fs-md-5xl mb-4">BrunchTime 食晨已到</h2>
+      <p class="fw-semibold fs-lg fs-md-xl mb-6">
         無論是忙碌還是閒暇<br />
         我們的早午餐讓你輕鬆享受美味，每一口都是愉快的開始。
       </p>
-      <button type="button" class="btn btn-accent px-8">立即選購</button>
+      <button
+        type="button"
+        class="banner__btn btn btn-accent px-8 px-md-lg fs-md-lg fw-semibold text-hover-white"
+        style="letter-spacing: 0.15ch"
+        @click="$router.push('/products')"
+      >
+        立即選購
+      </button>
     </div>
   </section>
   <!-- weApply -->
@@ -39,13 +38,23 @@
     </div>
   </section>
   <!-- news -->
-  <section id="newsSection" class="bg-News">
+  <section id="newsSection" class="news-bg">
     <div class="container py-8 py-lg-10">
       <h2 class="fw-bold text-secondary text-center fs-3xl lh-1 mb-6 mb-lg-10">最新公告</h2>
-      <ul class="mx-auto col-lg-6 mb-6">
-        <li v-for="list in orderedNews" :key="list.date" class="news fs-xl mb-5 text-neutral-dark">
-          <time :datetime="list.date">{{ list.date }}</time>
-          <p v-html="list.contentHtml"></p>
+      <ul class="mb-6 d-flex justify-content-around flex-column flex-md-row">
+        <li
+          v-for="news in articleList"
+          :key="news.create_at"
+          class="text-neutral-dark col-md-3 mb-6 mb-md-0 cursor-pointer"
+          @click="$router.push(`/news/${news.id}`)"
+        >
+          <div class="news overflow-hidden">
+            <img :src="news.image" alt="newsImage" class="news__photo w-100 transition" />
+            <div class="news__content position-absolute align-content-center text-white">
+              <p class="news__content__title fs-xl fs-sm-2xl fs-lg-xl fw-bold transition">{{ news.title }}</p>
+              <p class="news__content__desc transition-transform">{{ news.description }}</p>
+            </div>
+          </div>
         </li>
       </ul>
       <div class="text-center">
@@ -100,7 +109,8 @@ import { Autoplay, Pagination } from 'swiper/modules';
 import ProductCard from '@/components/client/ProductCard.vue';
 import { mapActions, mapState } from 'pinia';
 import productStore from '@/stores/productStore';
-import newsStore from '@/stores/newsStore';
+import articleStore from '@/stores/newsStore';
+import { formatDate } from '@/composable/useHelper';
 
 export default {
   emits: ['updateCart'],
@@ -116,34 +126,52 @@ export default {
     };
   },
   methods: {
+    formatDate,
     ...mapActions(productStore, ['getProducts']),
+    ...mapActions(articleStore, ['getArticles']),
   },
   computed: {
     ...mapState(productStore, ['productList']),
-    ...mapState(newsStore, ['orderedNews']),
+    ...mapState(articleStore, ['articleList']),
   },
   async mounted() {
     this.getProducts('custom');
+    this.getArticles('custom');
   },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .banner__slogan__title {
   text-shadow: 1px 1px 0 currentColor;
 }
-.news {
-  border-style: solid;
-  border-width: 4px 0;
-  border-color: cyan;
+.banner {
+  background-image: url('https://images.pexels.com/photos/2335690/pexels-photo-2335690.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+  background-attachment: fixed;
+  background-color: #5e5e5e;
+  background-blend-mode: overlay;
+  background-position: center;
+  padding-block: 30vh;
+
+  .banner__btn:hover {
+    color: rgb(243, 227, 227);
+  }
 }
-.bg-News {
+.news-bg {
   &::after,
   &::before {
     content: '';
     position: absolute;
     height: 100%;
     width: 270px;
+    z-index: -1;
+
+    @media (width < 1100px) {
+      width: 180px;
+    }
+    @media (width < 767px) {
+      display: none;
+    }
   }
   &::before {
     left: 0;
@@ -159,6 +187,40 @@ export default {
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+  }
+}
+.news {
+  &__content {
+    top: 0;
+    height: 100%;
+    width: 100%;
+    align-content: center;
+    text-align: center;
+
+    @media (width > 767px) {
+      &__desc {
+        transform: translateY(500%);
+        opacity: 0;
+        line-height: 0;
+      }
+    }
+  }
+
+  &__photo {
+    aspect-ratio: 1.25/1;
+    filter: brightness(70%);
+  }
+}
+.news:hover {
+  .news__photo {
+    filter: brightness(50%);
+    scale: 1.25;
+  }
+  .news__content__desc {
+    color: #ebe0e0;
+    opacity: 1;
+    transform: translateY(0);
+    line-height: 1;
   }
 }
 </style>

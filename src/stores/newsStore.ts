@@ -9,7 +9,7 @@ const { VITE_APP_API_NAME: path } = import.meta.env;
 const articleStore = defineStore('articles', {
   state() {
     return {
-      articleList: [],
+      articleList: [] as Article[],
       pagination: {},
     };
   },
@@ -28,7 +28,7 @@ const articleStore = defineStore('articles', {
       try {
         const apiPath = `v2/api/${path}/article/${id}`;
         const { data } = await useFetch(apiPath, 'get');
-        return data;
+        return data.article;
       } catch (err) {
         errorAlert();
         return false;
@@ -52,7 +52,7 @@ const articleStore = defineStore('articles', {
       try {
         const apiPath = article.id ? `v2/api/${path}/admin/article/${article.id}` : `v2/api/${path}/admin/article`;
         const method = article.id ? 'put' : 'post';
-        const { data } = await useFetch(apiPath, method, true, article);
+        const { data } = await useFetch(apiPath, method, true, { data: { ...article } });
         if (data.success) {
           toast(method === 'put' ? '文章已更新' : '文章已建立');
           this.getArticles('admin');
