@@ -51,6 +51,7 @@
     @delete-target="async (id: string) => await deleteCoupon(id)"
   />
   <CouponModal ref="couponModal" :coupon="tempCoupon" @update-coupon="updateCoupons" />
+  <Loading :active="onLoading" />
 </template>
 
 <script lang="ts">
@@ -61,6 +62,7 @@ import CouponModal from '@/components/Dashboard/CouponModal.vue';
 import DeleteModal from '@/components/Dashboard/DeleteModal.vue';
 import Pagination from '@/components/PaginationComp.vue';
 import type Coupon from '@/interface/coupon';
+import Loading from '@/components/LoadingComp.vue';
 
 export default {
   data() {
@@ -70,7 +72,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(couponStore, ['couponList', 'pagination']),
+    ...mapState(couponStore, ['couponList', 'pagination', 'onLoading']),
     finalCouponList() {
       if (this.isHideExpired) {
         const date = Date.now() / 1000;
@@ -112,6 +114,7 @@ export default {
     CouponModal,
     DeleteModal,
     Pagination,
+    Loading,
   },
   async mounted() {
     await this.getCoupons();

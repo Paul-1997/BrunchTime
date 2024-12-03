@@ -2,7 +2,13 @@
   <div class="container">
     <div class="d-flex justify-content-center py-6">
       <div class="col-md-9">
-        <div class="news__detail mx-auto d-flex flex-column">
+        <Loading
+          :active="onLoading"
+          :is-full-page="false"
+          :loader="'spinner'"
+          style="display: grid; place-content: center; min-height: 60vh"
+        />
+        <div class="news__detail mx-auto d-flex flex-column" v-if="!onLoading">
           <h3 class="news__detail__title fw-bold text-secondary fs-xl fs-md-3xl">{{ article.title }}</h3>
           <p class="ps-1 mb-2 text-neutral">
             <time
@@ -74,8 +80,12 @@ import type Article from '@/interface/news';
 import articleStore from '@/stores/newsStore';
 import { mapActions, mapState } from 'pinia';
 import { formatDate } from '@/composable/useHelper';
+import Loading from '@/components/LoadingComp.vue';
 
 export default {
+  components: {
+    Loading,
+  },
   data() {
     return {
       article: {} as Article,
@@ -94,7 +104,7 @@ export default {
     ...mapActions(articleStore, ['getArticles', 'getSingleArticle']),
   },
   computed: {
-    ...mapState(articleStore, ['articleList', 'pagination']),
+    ...mapState(articleStore, ['articleList', 'pagination', 'onLoading']),
   },
   async mounted() {
     await this.getArticles('custom');

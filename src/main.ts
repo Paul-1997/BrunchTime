@@ -35,8 +35,8 @@ pinia.use(({ store }) => {
 
 app.use(pinia);
 app.use(router);
-
 // 注册 VeeValidate 组件
+
 app.component('VeeField', Field);
 app.component('VeeForm', Form);
 app.component('VeeErrorMessage', ErrorMessage);

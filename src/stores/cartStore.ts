@@ -16,11 +16,13 @@ const cartStore = defineStore('cart', {
       carts: [],
       total: 0,
       f_total: 0,
+      onLoading: false,
     };
   },
   actions: {
     async getCarts() {
       try {
+        this.onLoading = true;
         const { data } = await useFetch(`v2/api/${path}/cart`, 'get');
         if (data.success) {
           this.carts = data.data.carts;
@@ -29,27 +31,32 @@ const cartStore = defineStore('cart', {
         }
       } catch (error) {
         errorAlert('發生錯誤');
+      } finally {
+        this.onLoading = false;
       }
     },
     async updateCart(cartItem: CartItem, isExist = false) {
       try {
-        // console.log(cartItem, isExist);
         const method = isExist ? 'put' : 'post';
         let apiPath = `v2/api/${path}/cart`;
         if (isExist) apiPath += `/${cartItem.product_id}`;
+        this.onLoading = true;
         const { data } = await useFetch(apiPath, method, false, { data: cartItem });
         if (data.success) {
-          toast('已加入購物車');
+          toast(method === 'post' ? '已加入購物車' : '購物車已更新');
           this.getCarts();
         }
       } catch (err) {
         if (axios.isAxiosError(err)) {
           errorAlert(err.response?.data.message || '錯誤!');
         }
+      } finally {
+        this.onLoading = false;
       }
     },
     async deleteCart(id: string) {
       try {
+        this.onLoading = true;
         const { data } = await useFetch(`v2/api/${path}/cart/${id}`, 'delete');
         if (data.success) {
           this.getCarts();
@@ -58,10 +65,13 @@ const cartStore = defineStore('cart', {
         if (axios.isAxiosError(err)) {
           errorAlert(err.response?.data.message || '錯誤!');
         }
+      } finally {
+        this.onLoading = false;
       }
     },
     async deleteAllCart() {
       try {
+        this.onLoading = true;
         const { data } = await useFetch(`v2/api/${path}/carts`, 'delete');
         if (data.success) {
           toast('購物車已清空');
@@ -71,6 +81,8 @@ const cartStore = defineStore('cart', {
         if (axios.isAxiosError(err)) {
           errorAlert(err.response?.data.message || '錯誤!');
         }
+      } finally {
+        this.onLoading = false;
       }
     },
   },

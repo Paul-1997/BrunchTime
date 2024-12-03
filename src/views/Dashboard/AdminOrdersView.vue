@@ -153,6 +153,8 @@
     @delete-target="async (id) => await deleteOrder(id)"
   />
   <OrderModal ref="edit" :order="tempOrder" :formatDate="formatDate" @update-order="updateOrder" />
+
+  <Loading :active="onLoading" />
 </template>
 
 <script lang="ts">
@@ -163,6 +165,7 @@ import orderStore from '@/stores/orderStore';
 import type { Order } from '@/interface/order';
 import OrderModal from '@/components/Dashboard/OrderModal.vue';
 import { formatDate } from '@/composable/useHelper';
+import Loading from '@/components/LoadingComp.vue';
 
 export default {
   data() {
@@ -193,7 +196,7 @@ export default {
     formatDate,
   },
   computed: {
-    ...mapState(orderStore, ['orderList', 'pagination']),
+    ...mapState(orderStore, ['orderList', 'pagination', 'onLoading']),
 
     finalOrder() {
       const filterOrder = [...this.orderList].filter((order) => {
@@ -215,6 +218,7 @@ export default {
     DeleteModal,
     OrderModal,
     Pagination,
+    Loading,
   },
 };
 </script>

@@ -58,7 +58,7 @@
     </div>
     <Pagination :pagination="pagination" @update-page="getNewProduct" />
   </div>
-
+  <Loading :active="onLoading" />
   <ProductModal ref="productModal" :product="tempProduct" @update-product="updateProducts" />
   <DeleteModal
     ref="deleteModal"
@@ -74,6 +74,7 @@ import ProductModal from '@/components/Dashboard/ProductModal.vue';
 import Pagination from '@/components/PaginationComp.vue';
 import DeleteModal from '@/components/Dashboard/DeleteModal.vue';
 import type Product from '@/interface/product';
+import Loading from '@/components/LoadingComp.vue';
 
 interface OrderOptions {
   highest_price: `價格<span class="material-symbols-outlined fs-base ms-2">arrow_upward</span>`;
@@ -115,7 +116,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(productStore, ['productList', 'pagination']),
+    ...mapState(productStore, ['productList', 'pagination', 'onLoading']),
     orderedProduct() {
       return [...this.productList].sort((a, b) => {
         if (this.currentOrderType === 'highest_price') return a.price - b.price;
@@ -132,6 +133,7 @@ export default {
     ProductModal,
     DeleteModal,
     Pagination,
+    Loading,
   },
 };
 </script>

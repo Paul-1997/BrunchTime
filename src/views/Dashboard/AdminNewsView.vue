@@ -57,6 +57,7 @@
       :target-id="tempArticle.id!"
       @delete-target="async (id) => await deleteArticle(id)"
     />
+    <Loading :active="onLoading" />
   </div>
 </template>
 
@@ -66,11 +67,13 @@ import News from '@/stores/newsStore';
 import NewsModal from '@/components/Dashboard/NewsModal.vue';
 import DeleteModal from '@/components/Dashboard/DeleteModal.vue';
 import type Article from '@/interface/news';
+import Loading from '@/components/LoadingComp.vue';
 
 export default {
   components: {
     NewsModal,
     DeleteModal,
+    Loading,
   },
   data() {
     return {
@@ -79,7 +82,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(News, ['articleList', 'pagination']),
+    ...mapState(News, ['articleList', 'pagination', 'onLoading']),
   },
   methods: {
     getModal(modalName: string, data?: any) {

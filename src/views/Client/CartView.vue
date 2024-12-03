@@ -1,7 +1,19 @@
 <template>
   <div class="container">
-    <div v-if="carts.length">
-      <OrderProgressbar :state="1" />
+    <!-- Cart is empty -->
+    <div
+      v-if="carts.length < 1 && onLoading === false"
+      class="my-2 p-4 align-content-center text-center text-secondary fw-semibold"
+      style="min-height: 60dvh; margin-block: 40px"
+    >
+      <p class="mb-5 fs-3xl">購物車內空空如也 <br />來點一些東西吃吧! <br />😋</p>
+      <button class="btn btn-accent text-dark py-3" @click="$router.push('/products')">點我瀏覽產品</button>
+    </div>
+    <!-- cart -->
+    <div v-else>
+      <div class="pt-lg">
+        <OrderProgressbar :state="1" />
+      </div>
       <div class="row flex-column-reverse flex-lg-row-reverse justify-content-center align-items-start my-10">
         <div class="col-lg-4">
           <div class="orderInfo d-flex flex-column h-100 p-3">
@@ -28,9 +40,9 @@
               type="button"
               class="btn btn-lg btn-accent text-secondary w-100 rounded-pill"
               @click="$router.push('/order')"
-              :disabled="!carts.length"
+              :disabled="!carts.length || onLoading"
             >
-              我要結帳
+              <span class="spinner-border spinner-border-sm" v-if="onLoading"> </span>我要結帳
             </button>
           </div>
         </div>
@@ -96,14 +108,6 @@
         </div>
       </div>
     </div>
-    <div
-      class="my-2 p-4 align-content-center text-center text-secondary fw-semibold"
-      style="min-height: 60dvh; margin-block: 40px"
-      v-else
-    >
-      <p class="mb-5 fs-3xl">購物車內空空如也 <br />來點一些東西吃吧! <br />😋</p>
-      <button class="btn btn-accent text-dark py-3" @click="$router.push('/products')">點我瀏覽產品</button>
-    </div>
   </div>
 </template>
 
@@ -145,7 +149,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(cartStore, ['f_total', 'total']),
+    ...mapState(cartStore, ['f_total', 'total', 'onLoading']),
   },
   components: {
     OrderProgressbar,

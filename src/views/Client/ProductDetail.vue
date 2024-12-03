@@ -1,6 +1,7 @@
 <template>
+  <Loading :active="onLoading" />
   <div class="container py-lg-lg py-md-10 py-6">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" v-if="!onLoading">
       <div class="col-md-5">
         <img
           :src="product.imageUrl"
@@ -39,14 +40,21 @@
 import type Product from '@/interface/product';
 import cartStore from '@/stores/cartStore';
 import productStore from '@/stores/productStore';
-import { mapActions } from 'pinia';
+import Loading from '@/components/LoadingComp.vue';
+import { mapActions, mapState } from 'pinia';
 
 export default {
+  components: {
+    Loading,
+  },
   data() {
     return {
       product: {} as Product,
       qty: 1 as number,
     };
+  },
+  computed: {
+    ...mapState(productStore, ['onLoading']),
   },
   methods: {
     ...mapActions(productStore, ['getSingleProduct']),

@@ -16,7 +16,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(cartStore, ['getCarts', 'updateCart']),
+    ...mapActions(cartStore, ['getCarts']),
   },
   async mounted() {
     await this.getCarts();
@@ -27,7 +27,7 @@ export default {
   <HeaderComp :cartsLength="carts.length" />
   <!-- header + footer 200px -->
   <main style="min-height: calc(100dvh - 200px)">
-    <RouterView @update-cart="updateCart" :carts="carts" />
+    <RouterView :carts="carts" />
   </main>
   <FooterComp />
 </template>

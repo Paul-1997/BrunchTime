@@ -1,35 +1,40 @@
 <template>
+  <Loading :active="onLoading" />
   <div class="container py-8 py-lg-lg">
     <OrderProgressbar :state="OrderState" />
     <div class="row row-gap-6">
       <div class="col-lg-7">
         <h3 class="mb-4 border-bottom border-neutral fw-bold fs-2xl">訂購項目</h3>
-        <ul class="mb-4 mb-md-0">
-          <template v-for="item in carts" :key="item.id">
-            <li class="cart d-flex align-items-center gap-2">
-              <div class="cart__Img p-2" style="flex-basis: 100px">
-                <img :src="item.product.imageUrl" alt="" class="w-100 h-100 object-fit-cover" />
-              </div>
-              <div class="flex-grow-1 d-flex justify-content-md-between flex-column flex-md-row row-gap-1">
-                <div class="w-100">
-                  <p class="fs-xl">
-                    <span class="me-4">{{ item.product.title }}</span>
-                    <span>{{ item.qty }}{{ item.product.unit }}</span>
-                  </p>
-                  <p class="w-fit fs-lg text-secondary">NT${{ item.final_total }}</p>
+        <div v-if="carts.length">
+          <ul class="mb-4 mb-md-0">
+            <template v-for="item in carts" :key="item.id">
+              <li class="cart d-flex align-items-center gap-2">
+                <div class="cart__Img p-2" style="flex-basis: 100px">
+                  <img :src="item.product.imageUrl" alt="" class="w-100 h-100 object-fit-cover" />
                 </div>
-              </div>
-            </li>
-            <!-- 分隔線 -->
-            <hr class="text-neutral" />
-          </template>
-        </ul>
-        <div class="d-flex justify-content-between align-items-center px-md-4">
-          <span class="fs-xl">份數：</span><span class="fs-2xl fw-bold text-secondary">{{ carts.length }}份</span>
+                <div class="flex-grow-1 d-flex justify-content-md-between flex-column flex-md-row row-gap-1">
+                  <div class="w-100">
+                    <p class="fs-xl">
+                      <span class="me-4">{{ item.product.title }}</span>
+                      <span>{{ item.qty }}{{ item.product.unit }}</span>
+                    </p>
+                    <p class="w-fit fs-lg text-secondary">NT${{ item.final_total }}</p>
+                  </div>
+                </div>
+              </li>
+              <!-- 分隔線 -->
+              <hr class="text-neutral" />
+            </template>
+          </ul>
+          <div class="d-flex justify-content-between align-items-center px-md-4">
+            <span class="fs-xl">總數：</span
+            ><span class="fs-2xl fw-bold text-secondary">{{ carts.reduce((a: any, b: any) => a + b.qty, 0) }}份</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center px-md-4">
+            <span class="fs-xl">總計：</span><span class="fs-2xl fw-bold text-secondary">${{ f_total }}&nbsp;元</span>
+          </div>
         </div>
-        <div class="d-flex justify-content-between align-items-center px-md-4">
-          <span class="fs-xl">總計：</span><span class="fs-2xl fw-bold text-secondary">${{ f_total }}&nbsp;元</span>
-        </div>
+        <Loading :active="!carts.length" :is-full-page="false" class="text-center" />
       </div>
       <VeeForm class="col-lg-5" ref="orderForm" as="form" v-slot="{ errors }" @submit="submitOrder">
         <h2 class="fw-bold border-bottom border-neutral">購買人資訊</h2>
@@ -132,6 +137,7 @@
 
 <script lang="ts">
 import OrderProgressbar from '@/components/client/OrderProgressbar.vue';
+import Loading from '@/components/LoadingComp.vue';
 import { formatDate } from '@/composable/useHelper';
 import cartStore from '@/stores/cartStore';
 import orderStore from '@/stores/orderStore';
@@ -142,7 +148,7 @@ export default {
   data() {
     return {
       OrderDetail: {},
-      OrderState: 3,
+      OrderState: 2,
       user: {
         name: '',
         email: '',
@@ -154,6 +160,7 @@ export default {
   },
   computed: {
     ...mapState(cartStore, ['f_total']),
+    ...mapState(orderStore, ['onLoading']),
   },
   methods: {
     formatDate,
@@ -163,13 +170,14 @@ export default {
       const result = await this.pushOrder({ user: this.user, message: this.message });
       if (result.success) {
         await this.getCarts();
-        (this.$refs.orderForm as HTMLFormElement).reset();
+        (this.$refs.orderForm as HTMLFormElement).resetForm();
         this.$router.push(`/order/${result.orderId}`);
       }
     },
   },
   components: {
     OrderProgressbar,
+    Loading,
   },
 };
 /*

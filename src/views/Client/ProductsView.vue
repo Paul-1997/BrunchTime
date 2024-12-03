@@ -1,4 +1,5 @@
 <template>
+  <Loading :active="onLoading" />
   <div class="about">
     <div class="container">
       <div class="row py-lg-lg py-md-10 py-6">
@@ -50,11 +51,13 @@ import productStore from '@/stores/productStore';
 import ProductCard from '@/components/client/ProductCard.vue';
 import Pagination from '@/components/PaginationComp.vue';
 import { mapActions, mapState } from 'pinia';
+import Loading from '@/components/LoadingComp.vue';
 
 export default {
   components: {
     Pagination,
     ProductCard,
+    Loading,
   },
   data() {
     return {
@@ -63,7 +66,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(productStore, ['productList', 'pagination']),
+    ...mapState(productStore, ['productList', 'pagination', 'onLoading']),
   },
   methods: {
     ...mapActions(productStore, ['getProducts']),

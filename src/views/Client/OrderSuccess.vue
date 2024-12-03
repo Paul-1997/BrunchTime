@@ -1,4 +1,5 @@
 <template>
+  <Loading :active="onLoading" />
   <div class="container py-6 py-lg-lg" v-if="orderInfo.id">
     <OrderProgressbar :state="OrderState" />
     <div class="col-lg-6 mx-auto mb-8 mb-md-10">
@@ -60,15 +61,16 @@
 </template>
 
 <script lang="ts">
-import { RouterLink } from 'vue-router';
 import OrderProgressbar from '@/components/client/OrderProgressbar.vue';
 import orderStore from '@/stores/orderStore';
 import { formatDate } from '@/composable/useHelper';
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
+import Loading from '@/components/LoadingComp.vue';
 
 export default {
   components: {
     OrderProgressbar,
+    Loading,
   },
   data() {
     return {
@@ -80,10 +82,12 @@ export default {
     formatDate,
     ...mapActions(orderStore, ['getSingleOrder']),
   },
+  computed: {
+    ...mapState(orderStore, ['onLoading']),
+  },
   async mounted() {
     const orderId = this.$route.path.split('/').pop();
     const result = await this.getSingleOrder(orderId!);
-    console.log(result, orderId);
     // 若找無訂單推至not found page
     if (result === false || result.order === null) this.$router.push('/NotFound');
     else this.orderInfo = result.order;

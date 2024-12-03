@@ -1,4 +1,5 @@
 <template>
+  <Loading :active="isLoading" />
   <!-- banner -->
   <section id="banner" class="banner align-content-center">
     <div class="banner__slogan container text-white">
@@ -111,14 +112,20 @@ import { mapActions, mapState } from 'pinia';
 import productStore from '@/stores/productStore';
 import articleStore from '@/stores/newsStore';
 import { formatDate } from '@/composable/useHelper';
+import Loading from '@/components/LoadingComp.vue';
 
 export default {
-  emits: ['updateCart'],
   props: ['carts'],
   components: {
     swiper,
     SwiperSlide,
     ProductCard,
+    Loading,
+  },
+  data() {
+    return {
+      isLoading: true,
+    };
   },
   setup() {
     return {
@@ -135,8 +142,9 @@ export default {
     ...mapState(articleStore, ['articleList']),
   },
   async mounted() {
-    this.getProducts('custom');
-    this.getArticles('custom');
+    await this.getProducts('custom');
+    await this.getArticles('custom');
+    this.isLoading = false;
   },
 };
 </script>

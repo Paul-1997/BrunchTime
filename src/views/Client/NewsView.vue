@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Loading :active="onLoading" />
     <div class="col-lg-10 py-6 py-lg-10 mx-auto">
       <h2 class="fw-bold fs-xl fs-md-2xl text-secondary mb-4 text-center">最新消息</h2>
       <ul class="col-md-8 mx-auto mb-10">
@@ -48,11 +49,13 @@
 <script lang="ts">
 import articleStore from '@/stores/newsStore';
 import { mapActions, mapState } from 'pinia';
-import PaginationComp from '@/components/PaginationComp.vue';
 import { formatDate } from '@/composable/useHelper';
+import PaginationComp from '@/components/PaginationComp.vue';
+import Loading from '@/components/LoadingComp.vue';
 
 export default {
   components: {
+    Loading,
     PaginationComp,
   },
   data() {
@@ -65,7 +68,7 @@ export default {
     ...mapActions(articleStore, ['getArticles']),
   },
   computed: {
-    ...mapState(articleStore, ['articleList', 'pagination']),
+    ...mapState(articleStore, ['articleList', 'pagination', 'onLoading']),
     isCurrentNews() {
       return true;
     },
