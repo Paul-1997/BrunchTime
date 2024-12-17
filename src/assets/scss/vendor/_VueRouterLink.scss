@@ -5,9 +5,11 @@
   color: $neutral-dark
 }
 
-:where(.nav__link,.nav-link):not(:has(.onActiveLink)):where(:focus, :hover, :focus-within) {
-  color: $secondary!important;
-  scale: 1.05;
+@media (width > 767px) {
+  :where(.nav__link,.nav-link):not(:has(.onActiveLink)):where(:focus, :hover, :focus-within) {
+    color: $secondary!important;
+    scale: 1.05;
+  }
 }
 
 //dashboard panel

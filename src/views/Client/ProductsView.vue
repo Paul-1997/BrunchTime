@@ -2,7 +2,12 @@
   <Loading :active="onLoading" />
   <div class="about">
     <div class="container">
-      <div class="row py-lg-lg py-md-10 py-6">
+      <div class="row py-lg-lg py-md-10 py-8">
+        <Breadcrumb class="position-absolute top-0 start-0">
+          <template #breadcrumb-item-1>
+            <router-link to="/products">產品介紹</router-link>
+          </template>
+        </Breadcrumb>
         <!-- product List -->
         <div class="col-md-3 d-none d-md-block">
           <!-- header 70px -->
@@ -54,12 +59,14 @@ import ProductCard from '@/components/client/ProductCard.vue';
 import Pagination from '@/components/PaginationComp.vue';
 import { mapActions, mapState } from 'pinia';
 import Loading from '@/components/LoadingComp.vue';
+import Breadcrumb from '@/components/Breadcrumb.vue';
 
 export default {
   components: {
     Pagination,
     ProductCard,
     Loading,
+    Breadcrumb,
   },
   data() {
     return {

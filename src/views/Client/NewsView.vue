@@ -1,7 +1,10 @@
 <template>
   <div class="container">
     <Loading :active="onLoading" />
-    <div class="col-lg-10 py-6 py-lg-10 mx-auto">
+    <div class="col-lg-10 py-8 py-lg-10 mx-auto">
+      <Breadcrumb class="position-absolute top-0 start-0">
+        <template #breadcrumb-item-1> 最新消息 </template>
+      </Breadcrumb>
       <h2 class="fw-bold fs-xl fs-md-2xl text-secondary mb-4 text-center">最新消息</h2>
       <ul class="col-md-8 mx-auto mb-10">
         <li
@@ -52,11 +55,13 @@ import { mapActions, mapState } from 'pinia';
 import { formatDate } from '@/composable/useHelper';
 import PaginationComp from '@/components/PaginationComp.vue';
 import Loading from '@/components/LoadingComp.vue';
+import Breadcrumb from '@/components/Breadcrumb.vue';
 
 export default {
   components: {
     Loading,
     PaginationComp,
+    Breadcrumb,
   },
   data() {
     return {

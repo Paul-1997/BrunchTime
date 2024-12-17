@@ -1,6 +1,14 @@
 <template>
   <Loading :active="onLoading" />
-  <div class="container py-lg-lg py-md-10 py-6">
+  <div class="container py-lg-lg py-md-10 py-8">
+    <Breadcrumb class="position-absolute top-0 start-0-0">
+      <template #breadcrumb-item-1>
+        <router-link to="/products">產品介紹</router-link>
+      </template>
+      <template #breadcrumb-item-2>
+        {{ product.title }}
+      </template>
+    </Breadcrumb>
     <div class="row justify-content-center" v-if="!onLoading">
       <div class="col-md-5">
         <img
@@ -41,11 +49,13 @@ import type Product from '@/interface/product';
 import cartStore from '@/stores/cartStore';
 import productStore from '@/stores/productStore';
 import Loading from '@/components/LoadingComp.vue';
+import Breadcrumb from '@/components/Breadcrumb.vue';
 import { mapActions, mapState } from 'pinia';
 
 export default {
   components: {
     Loading,
+    Breadcrumb,
   },
   data() {
     return {

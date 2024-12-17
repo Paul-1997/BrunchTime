@@ -11,6 +11,9 @@
     </div>
     <!-- cart -->
     <div v-else>
+      <Breadcrumb class="position-absolute top-0 start-0 my-2">
+        <template #breadcrumb-item-1> 購物車 </template>
+      </Breadcrumb>
       <div class="pt-lg">
         <OrderProgressbar :state="1" />
       </div>
@@ -84,7 +87,7 @@
                       :value="item.qty"
                       class="form-control py-1 text-center"
                       style="width: 70px"
-                      @change="updateQty(item.id, +$event.target.value)"
+                      @change="updateQty(item.id, +($event.target as HTMLInputElement).value)"
                     />
                     <button
                       type="button"
@@ -116,6 +119,8 @@ import cartStore from '@/stores/cartStore';
 import { mapActions, mapState } from 'pinia';
 import useFetch from '@/composable/useFetch';
 import OrderProgressbar from '@/components/client/OrderProgressbar.vue';
+import Breadcrumb from '@/components/Breadcrumb.vue';
+import { errorAlert } from '@/composable/useAlert';
 
 export default {
   props: ['carts'],
@@ -140,7 +145,7 @@ export default {
           this.getCarts();
         }
       } catch (error) {
-        console.log(error);
+        errorAlert('發生錯誤發生錯誤');
       }
     },
     // 點擊產品會跳轉到產品資訊頁
@@ -153,6 +158,7 @@ export default {
   },
   components: {
     OrderProgressbar,
+    Breadcrumb,
   },
 };
 </script>

@@ -1,6 +1,10 @@
 <template>
   <div class="container">
-    <div class="d-flex justify-content-center py-6">
+    <div class="row justify-content-center py-8">
+      <Breadcrumb class="position-absolute top-0 start-0">
+        <template #breadcrumb-item-1> <router-link to="/news">最新消息</router-link> </template>
+        <template #breadcrumb-item-2> {{ article.title }}</template>
+      </Breadcrumb>
       <div class="col-md-9">
         <Loading
           :active="onLoading"
@@ -81,10 +85,12 @@ import articleStore from '@/stores/newsStore';
 import { mapActions, mapState } from 'pinia';
 import { formatDate } from '@/composable/useHelper';
 import Loading from '@/components/LoadingComp.vue';
+import Breadcrumb from '@/components/Breadcrumb.vue';
 
 export default {
   components: {
     Loading,
+    Breadcrumb,
   },
   data() {
     return {
