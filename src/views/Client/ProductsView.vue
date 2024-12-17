@@ -32,14 +32,16 @@
         <div class="col-md-9">
           <div class="row row-gap-6 mb-8">
             <h3 class="mb-4 ms-4 ps-4 border-start border-accent border-5 text-xl fw-bold">{{ currProductType }}</h3>
-            <div v-if="productList.length === 0" class="mx-auto w-fit text-center bg-primary py-4 px-8 rounded-pill">
-              該系列尚未有任何產品
+            <div v-if="productList.length === 0" class="mx-auto w-fit text-center text-secondary py-4 px-8">
+              該系列尚未有任何商品
             </div>
             <div class="col-md-6 col-lg-4" v-for="product in productList" :key="product.id">
               <ProductCard :product="product" />
             </div>
           </div>
-          <Pagination :pagination="pagination" @update-page="getNewProduct" />
+          <template v-if="productList.length > 0">
+            <Pagination :pagination="pagination" @update-page="getNewProduct" />
+          </template>
         </div>
       </div>
     </div>

@@ -15,8 +15,12 @@
 @import './scss/components/productCard';
 @import './scss/components/banner';
 @import './scss/components/carts';
+@import './scss/components/pagination';
 @import './scss/components/scrollBtn';
 
 //animation.css
 @import 'animate.css';
 @import 'swiper/css';
+
+//
+@import 'aos/dist/aos.css';

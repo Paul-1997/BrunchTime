@@ -4,6 +4,9 @@ import ClientView from '@/views/Client/ClientView.vue';
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   linkExactActiveClass: 'onActiveLink',
+  scrollBehavior() {
+    return { top: 0 };
+  },
   routes: [
     {
       path: '/login',

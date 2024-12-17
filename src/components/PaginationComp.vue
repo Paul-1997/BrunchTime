@@ -1,5 +1,5 @@
 <template>
-  <nav aria-label="Page navigation example">
+  <nav aria-label="page navigation" class="pb-6">
     <ul class="pagination flex justify-content-center">
       <li class="page-item">
         <a
@@ -14,10 +14,10 @@
       </li>
       <li class="page-item" v-for="page in pagination.total_pages" :key="page">
         <a
-          class="page-link bg-hover-accent"
+          class="page-link"
           href="#"
           @click.prevent="changePage(page)"
-          :class="{ 'text-neutral-dark bg-primary': pagination.current_page === page }"
+          :class="{ onActive: pagination.current_page === page }"
           >{{ page }}</a
         >
       </li>

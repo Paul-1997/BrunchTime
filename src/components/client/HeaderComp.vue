@@ -1,15 +1,13 @@
 <template>
-  <header class="bg-primary position-sticky top-0 z-2">
-    <!-- coupon -->
-    <div class="alert alert-info py-1 mb-0 text-center">
-      <span class="me-5">限時優惠，套餐系列憑此優惠碼享95折優惠 優惠碼: happyBreakfast</span>
-      <button type="button" class="btn btn-sm btn-accent">複製優惠碼</button>
-      <span class="btn-close position-absolute end-0 me-4" data-bs-dismiss="alert" aria-label="Close"></span>
-    </div>
+  <CouponAlert />
+  <header class="bg-primary position-sticky top-0 z-2 py-2">
     <nav class="navbar navbar-expand-md navbar-primary bg-primary py-0">
       <div class="container">
-        <RouterLink class="navbar-brand d-flex align-items-center py-0 text-secondary text-hover-secondary" to="/">
-          <img src="/logo.png" alt="logoImage" height="60" width="60" style="margin-right: -8px" />BrunchTime
+        <RouterLink
+          class="navbar-brand d-flex align-items-center py-0 text-secondary text-hover-secondary fs-2xl"
+          to="/"
+        >
+          <img src="/logo.png" alt="logoImage" style="margin-right: -8px; aspect-ratio: 1; height: 80px" />BrunchTime
         </RouterLink>
         <button
           class="navbar-toggler"
@@ -45,7 +43,12 @@
 </template>
 
 <script>
+import CouponAlert from './couponAlert.vue';
+
 export default {
   props: ['cartsLength'],
+  components: {
+    CouponAlert,
+  },
 };
 </script>

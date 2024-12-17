@@ -19,19 +19,19 @@
     </div>
   </section>
   <!-- weApply -->
-  <section class="bg-accent bg-opacity-50">
+  <section class="bg-accent bg-opacity-25">
     <div class="container py-8 py-lg-10">
       <h2 class="fw-bold text-secondary text-center fs-3xl lh-1 mb-6 mb-lg-10">我們提供</h2>
       <ul class="d-flex align-items-center justify-content-around gap-4 rowgap-4 flex-wrap">
-        <li class="col-md-3">
+        <li class="col-md-3" data-aos="fade-up" data-aos-delay="200">
           <img src="/public/service.png" alt="" class="mb-4 img-square" />
           <p class="text-center text-secondary fw-semibold fs-lg-2xl fs-lg">優質的服務</p>
         </li>
-        <li class="col-md-3">
+        <li class="col-md-3" data-aos="fade-up" data-aos-delay="400">
           <img src="/public/food-index.jpg" alt="" class="mb-4 img-square" />
           <p class="text-center text-secondary fw-semibold fs-lg-2xl fs-lg">高品質的美食</p>
         </li>
-        <li class="col-md-3">
+        <li class="col-md-3" data-aos="fade-up" data-aos-delay="600">
           <img src="/public/area-index.png" alt="" class="mb-4 img-square" style="object-fit: fill" />
           <p class="text-center text-secondary fw-semibold fs-lg-2xl fs-lg">舒適的環境</p>
         </li>
@@ -40,7 +40,12 @@
   </section>
   <!-- news -->
   <section id="newsSection" class="news-bg">
-    <div class="container py-8 py-lg-10">
+    <div
+      class="container py-8 py-lg-10"
+      data-aos="zoom-in"
+      data-aos-offset="100"
+      data-aos-anchor-placement="center-bottom"
+    >
       <h2 class="fw-bold text-secondary text-center fs-3xl lh-1 mb-6 mb-lg-10">最新公告</h2>
       <ul class="mb-6 d-flex justify-content-around flex-column flex-md-row">
         <li
@@ -66,8 +71,8 @@
     </div>
   </section>
   <!-- recommend_food -->
-  <section id="recommend_Product" class="bg-opacity-25 bg-primary">
-    <div class="container py-8 py-lg-10">
+  <section id="recommend-product" class="bg-opacity-25 bg-primary">
+    <div class="container py-8 py-lg-10" data-aos="zoom-in" data-aos-anchor-placement="center-bottom">
       <h2 class="fw-bold text-secondary text-center fs-3xl lh-1 mb-6 mb-lg-10">精選推薦</h2>
       <swiper
         :slidesPerView="1"
@@ -230,5 +235,8 @@ export default {
     transform: translateY(0);
     line-height: 1;
   }
+}
+.aos-animate {
+  will-change: transform, opacity;
 }
 </style>
