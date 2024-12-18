@@ -1,0 +1,1 @@
+function c(r,o=!1){const t=new Date(r*1e3),n=t.getFullYear(),e=String(t.getMonth()+1).padStart(2,"0"),a=String(t.getDate()).padStart(2,"0"),s=String(t.getHours()).padStart(2,"0"),g=String(t.getMinutes()).padStart(2,"0"),S=String(t.getSeconds()).padStart(2,"0");return o?`${n}/${e}/${a} ${s}:${g}:${S}`:`${n}/${e}/${a}`}export{c as f};
