@@ -16,11 +16,11 @@
         是一家專注於提供優質早午餐體驗的餐廳。我們精選新鮮食材，打造美味的早午餐菜單，旨在為顧客營造舒適的用餐環境和愉悅的氛圍。無論是忙碌的工作日早餐，還是輕鬆的週末午餐，這裡都是您理想的選擇，讓每一餐都充滿美好回憶。歡迎您來體驗我們的美食和服務！
       </p>
       <div class="col-6 flex-grow-1">
-        <img src="/clerk.jpg" alt="our nicest clerk" class="h-100" />
+        <img src="/clerk.png" alt="our nicest clerk" class="h-100" />
       </div>
       <div class="col-6 d-flex flex-column gap-6">
         <img src="/food.jpg" alt="our brunch" />
-        <img src="/area.jpg" alt="our dinning area" />
+        <img src="/area.png" alt="our dinning area" />
       </div>
     </section>
     <!-- information -->
@@ -62,7 +62,7 @@
 </style>
 
 <script lang="ts">
-import Breadcrumb from '@/components/Breadcrumb.vue';
+import Breadcrumb from '@/components/BreadcrumbComp.vue';
 
 export default {
   components: {

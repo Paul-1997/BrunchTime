@@ -75,26 +75,32 @@ const router = createRouter({
       component: () => import('../views/Dashboard/DashboardView.vue'),
       children: [
         {
-          path: 'dashboard',
+          path: '',
+          name: 'dashboard-home',
           component: () => import('../views/Dashboard/DashboardView.vue'),
         },
         {
           path: 'products',
+          name: 'dashboard-products',
           component: () => import('../views/Dashboard/AdminProductsView.vue'),
         },
         {
           path: 'articles',
+          name: 'dashboard-articles',
           component: () => import('../views/Dashboard/AdminNewsView.vue'),
         },
         {
-          path: 'Orders',
+          path: 'orders',
+          name: 'dashboard-orders',
           component: () => import('../views/Dashboard/AdminOrdersView.vue'),
         },
         {
-          path: 'Coupons',
+          path: 'coupons',
+          name: 'dashboard-coupons',
           component: () => import('../views/Dashboard/AdminCouponsView.vue'),
         },
       ],
+      meta: { requiresAuth: true },
     },
 
     // not found Redirect

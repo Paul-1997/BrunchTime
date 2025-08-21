@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import useFetch from '@/composable/useFetch';
-import type Coupon from '@/interface/coupon';
+import type Coupon from '@/types/coupon';
 import { errorAlert, toast } from '@/composable/useAlert';
 import axios from 'axios';
 

@@ -80,12 +80,12 @@
 </style>
 
 <script lang="ts">
-import type Article from '@/interface/news';
+import type Article from '@/types/news';
 import articleStore from '@/stores/newsStore';
 import { mapActions, mapState } from 'pinia';
-import { formatDate } from '@/composable/useHelper';
+import formatDate from '@/utils/formateDate';
 import Loading from '@/components/LoadingComp.vue';
-import Breadcrumb from '@/components/Breadcrumb.vue';
+import Breadcrumb from '@/components/BreadcrumbComp.vue';
 
 export default {
   components: {

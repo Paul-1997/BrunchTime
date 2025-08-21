@@ -119,7 +119,7 @@ import cartStore from '@/stores/cartStore';
 import { mapActions, mapState } from 'pinia';
 import useFetch from '@/composable/useFetch';
 import OrderProgressbar from '@/components/client/OrderProgressbar.vue';
-import Breadcrumb from '@/components/Breadcrumb.vue';
+import Breadcrumb from '@/components/BreadcrumbComp.vue';
 import { errorAlert } from '@/composable/useAlert';
 
 export default {

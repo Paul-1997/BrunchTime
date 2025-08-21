@@ -3,7 +3,7 @@ import { errorAlert } from '@/composable/useAlert';
 import useFetch from '@/composable/useFetch';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import type { Admin } from '@/interface/Admin';
+import type { Admin } from '@/types/Admin';
 
 const userStore = defineStore('user', {
   actions: {

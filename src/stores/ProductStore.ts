@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import useFetch from '@/composable/useFetch';
-import type Product from '@/interface/product';
-import type PaginationType from '@/interface/pagination';
+import type Product from '@/types/product';
+import type PaginationType from '@/types/pagination';
 import { errorAlert, toast } from '@/composable/useAlert';
 import axios from 'axios';
 

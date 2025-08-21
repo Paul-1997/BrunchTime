@@ -63,9 +63,10 @@
 <script lang="ts">
 import OrderProgressbar from '@/components/client/OrderProgressbar.vue';
 import orderStore from '@/stores/orderStore';
-import { formatDate } from '@/composable/useHelper';
+import formatDate from '@/utils/formateDate';
 import { mapActions, mapState } from 'pinia';
 import Loading from '@/components/LoadingComp.vue';
+import type { Order } from '@/types/order';
 
 export default {
   components: {
@@ -75,7 +76,21 @@ export default {
   data() {
     return {
       OrderState: 3,
-      orderInfo: {},
+      orderInfo: {
+        id: '',
+        create_at: 0,
+        products: [],
+        total: 0,
+        is_paid: false,
+        num: 0,
+        user: {
+          name: '',
+          tel: '',
+          email: '',
+          address: '',
+        },
+        message: '',
+      } as unknown as Order,
     };
   },
   methods: {

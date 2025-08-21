@@ -7,7 +7,7 @@
           href="#"
           aria-label="Previous"
           :class="{ disabled: !pagination.has_pre }"
-          @click="changePage(pagination.current_page - 1)"
+          @click.prevent="changePage(pagination.current_page - 1)"
         >
           <span aria-hidden="true">&laquo;</span>
         </a>
@@ -27,7 +27,7 @@
           href="#"
           aria-label="Next"
           :class="{ disabled: !pagination.has_next }"
-          @click="changePage(pagination.current_page + 1)"
+          @click.prevent="changePage(pagination.current_page + 1)"
         >
           <span aria-hidden="true">&raquo;</span>
         </a>

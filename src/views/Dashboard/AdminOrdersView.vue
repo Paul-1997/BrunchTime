@@ -162,9 +162,9 @@ import { mapActions, mapState } from 'pinia';
 import Pagination from '@/components/PaginationComp.vue';
 import DeleteModal from '@/components/Dashboard/DeleteModal.vue';
 import orderStore from '@/stores/orderStore';
-import type { Order } from '@/interface/order';
+import type { Order } from '@/types/order';
 import OrderModal from '@/components/Dashboard/OrderModal.vue';
-import { formatDate } from '@/composable/useHelper';
+import formatDate from '@/utils/formateDate';
 import Loading from '@/components/LoadingComp.vue';
 
 export default {

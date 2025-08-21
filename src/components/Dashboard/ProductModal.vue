@@ -261,8 +261,8 @@
 <script lang="ts">
 import { Modal } from 'bootstrap';
 import type { VueElement } from 'vue';
-import type Product from '@/interface/product';
-import useDebounce from '@/composable/useDebounce';
+import type Product from '@/types/product';
+import debounce from '@/utils/debounce';
 
 export default {
   props: ['product'],
@@ -274,7 +274,7 @@ export default {
     };
   },
   methods: {
-    updateImg({ imageUrl }) {
+    updateImg({ imageUrl }: { imageUrl: string }) {
       this.deepCloneProduct.imageUrl = imageUrl;
     },
     openModal() {
@@ -297,7 +297,7 @@ export default {
         this.deepCloneProduct.imagesUrl = [...this.deepCloneProduct.imagesUrl, ''];
       }
     },
-    doDebounce: useDebounce((t, idx, v) => {
+    doDebounce: debounce((t, idx, v) => {
       const target = t;
       target[idx] = v;
     }),

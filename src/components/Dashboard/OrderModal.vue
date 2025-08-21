@@ -260,8 +260,8 @@
 </template>
 
 <script lang="ts">
-import type { Order } from '@/interface/order';
-import type Product from '@/interface/product';
+import type { Order, ProductItem } from '@/types/order';
+import type Product from '@/types/product';
 import { Modal } from 'bootstrap';
 import type { VueElement } from 'vue';
 import { mapActions } from 'pinia';
@@ -319,7 +319,7 @@ export default {
       this.updateTotal();
     },
     updateTotal() {
-      this.deepCloneOrder.total = Object.values(this.deepCloneOrder.products).reduce(
+      this.deepCloneOrder.total = Object.values(this.deepCloneOrder.products as unknown as ProductItem[]).reduce(
         (a, b) => a + b.qty * b.product.price,
         0,
       );
@@ -358,8 +358,8 @@ export default {
   },
   async mounted() {
     this.modal = new Modal(this.$refs.orderEdit as VueElement);
-    const { products } = await this.getAllProducts;
-    this.itemList = products;
+    const products = await this.getAllProducts;
+    this.itemList = products || [];
   },
   watch: {
     order() {

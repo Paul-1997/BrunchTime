@@ -103,8 +103,8 @@
 <script lang="ts">
 import { Modal } from 'bootstrap';
 import type { VueElement } from 'vue';
-import { formatDate } from '@/composable/useHelper';
-import type Coupon from '@/interface/coupon';
+import formatDate from '@/utils/formateDate';
+import type Coupon from '@/types/coupon';
 
 export default {
   props: ['coupon'],

@@ -45,11 +45,11 @@
 </template>
 
 <script lang="ts">
-import type Product from '@/interface/product';
+import type Product from '@/types/product';
 import cartStore from '@/stores/cartStore';
 import productStore from '@/stores/productStore';
 import Loading from '@/components/LoadingComp.vue';
-import Breadcrumb from '@/components/Breadcrumb.vue';
+import Breadcrumb from '@/components/BreadcrumbComp.vue';
 import { mapActions, mapState } from 'pinia';
 
 export default {

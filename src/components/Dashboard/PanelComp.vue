@@ -4,19 +4,19 @@
       <img src="/logo.png" alt="logo" class="home-logo mb-4" />
       <ul class="w-100 text-center fs-xl">
         <li class="nav__link mb-3">
-          <RouterLink class="py-3 px-2 d-block" to="/dashboard">總覽</RouterLink>
+          <RouterLink class="py-3 px-2 d-block" :to="{ name: 'dashboard-home' }">總覽</RouterLink>
         </li>
         <li class="nav__link mb-3">
-          <RouterLink class="py-3 px-2 d-block" to="/dashboard/products">產品管理</RouterLink>
+          <RouterLink class="py-3 px-2 d-block" :to="{ name: 'dashboard-products' }">產品管理</RouterLink>
         </li>
         <li class="nav__link mb-3">
-          <RouterLink class="py-3 px-2 d-block" to="/dashboard/orders">訂單管理</RouterLink>
+          <RouterLink class="py-3 px-2 d-block" :to="{ name: 'dashboard-orders' }">訂單管理</RouterLink>
         </li>
         <li class="nav__link mb-3">
-          <RouterLink class="py-3 px-2 d-block" to="/dashboard/articles">文章管理</RouterLink>
+          <RouterLink class="py-3 px-2 d-block" :to="{ name: 'dashboard-articles' }">文章管理</RouterLink>
         </li>
         <li class="nav__link">
-          <RouterLink class="py-3 px-2 d-block" to="/dashboard/coupons">優惠卷管理</RouterLink>
+          <RouterLink class="py-3 px-2 d-block" :to="{ name: 'dashboard-coupons' }">優惠卷管理</RouterLink>
         </li>
       </ul>
       <div class="panel__footer mt-auto">
@@ -32,21 +32,18 @@
         </ul>
       </div>
     </div>
-    <a
-      href=""
-      class="rounded-end-pill pe-1 py-3 d-md-none align-self-center"
-      @click.prevent="togglePanel"
-      style="background-color: #ffc50f"
-    >
-      <span class="material-symbols-outlined transition duration-250" :class="isPanelOpenIconClass">
+    <button class="toggle-btn d-md-none align-self-center" @click="togglePanel">
+      <span class="material-symbols-outlined transition duration-250" :class="{ 'rotate-180': isPanelOpen }">
         double_arrow
       </span>
-    </a>
+    </button>
   </nav>
 </template>
 
 <script lang="ts">
 export default {
+  name: 'PanelComp',
+  emits: ['userLoginOut'],
   data() {
     return {
       panel: null as HTMLElement | null,
@@ -55,47 +52,30 @@ export default {
   },
   methods: {
     togglePanel() {
-      if (this.panel === null) return;
-      if (!this.panel.classList.contains('hidden')) {
-        this.panel.classList.add('hidden');
-        this.isPanelOpen = false;
-      } else {
-        this.panel.classList.remove('hidden');
-        this.isPanelOpen = true;
-      }
+      if (!this.panel) return;
+      this.isPanelOpen = !this.isPanelOpen;
+      this.panel.classList.toggle('hidden');
     },
-    togglePanelByWidth() {
-      if (this.panel === null) return;
-      const width = window.innerWidth;
-      if (width < 769) {
-        this.panel.classList.add('hidden');
-        this.isPanelOpen = false;
-      } else {
-        this.panel?.classList.remove('hidden');
-        this.isPanelOpen = true;
-      }
-    },
-  },
-  computed: {
-    isPanelOpenIconClass() {
-      return this.isPanelOpen ? 'rotate-180' : '';
+    handleResize() {
+      if (!this.panel) return;
+      const isMobile = window.innerWidth < 769;
+      this.isPanelOpen = !isMobile;
+      this.panel.classList.toggle('hidden', isMobile);
     },
   },
   mounted() {
     this.panel = this.$refs.panel as HTMLElement;
-    // 初始檢查瀏覽器高度
-    this.togglePanelByWidth();
-
-    // 在 resize 時監聽瀏覽器高度變化
-    window.addEventListener('resize', this.togglePanelByWidth);
+    this.handleResize();
+    window.addEventListener('resize', this.handleResize);
   },
   beforeUnmount() {
-    // 移除監聽器
-    window.removeEventListener('resize', this.togglePanelByWidth);
+    window.removeEventListener('resize', this.handleResize);
   },
   watch: {
-    '$route.query': function () {
-      if (window.innerWidth < 768) this.togglePanel();
+    '$route.query': {
+      handler() {
+        if (window.innerWidth < 768) this.togglePanel();
+      },
     },
   },
 };
@@ -116,6 +96,28 @@ $sideBarSize: clamp(248px, 22.5vw, 300px);
 
   &.hidden {
     width: 0;
+  }
+}
+
+.toggle-btn {
+  border-radius: 0 100vw 100vw 0;
+  height: 40px;
+  border-color: transparent;
+  span {
+    --slide-distance: 15%;
+    color: hsla(from currentColor h s l / 0.5);
+  }
+  &:hover > span:not(.rotate-180) {
+    animation: slide 1s infinite;
+  }
+
+  @keyframes slide {
+    0% {
+      transform: translateX(calc(var(--slide-distance) * -1));
+    }
+    100% {
+      transform: translateX(var(--slide-distance));
+    }
   }
 }
 </style>

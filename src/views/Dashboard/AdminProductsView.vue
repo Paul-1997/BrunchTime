@@ -73,7 +73,7 @@ import productStore from '@/stores/productStore';
 import ProductModal from '@/components/Dashboard/ProductModal.vue';
 import Pagination from '@/components/PaginationComp.vue';
 import DeleteModal from '@/components/Dashboard/DeleteModal.vue';
-import type Product from '@/interface/product';
+import type Product from '@/types/product';
 import Loading from '@/components/LoadingComp.vue';
 
 interface OrderOptions {

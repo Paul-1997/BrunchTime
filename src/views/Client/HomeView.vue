@@ -24,15 +24,15 @@
       <h2 class="fw-bold text-secondary text-center fs-3xl lh-1 mb-6 mb-lg-10">我們提供</h2>
       <ul class="d-flex align-items-center justify-content-around gap-4 rowgap-4 flex-wrap">
         <li class="col-md-3" data-aos="fade-up" data-aos-delay="200">
-          <img src="/public/service.png" alt="" class="mb-4 img-square" />
+          <img src="/service.png" alt="優質服務" class="mb-4 img-square" loading="lazy" />
           <p class="text-center text-secondary fw-semibold fs-lg-2xl fs-lg">優質的服務</p>
         </li>
         <li class="col-md-3" data-aos="fade-up" data-aos-delay="400">
-          <img src="/public/food-index.jpg" alt="" class="mb-4 img-square" />
+          <img src="/food-index.jpg" alt="高品質美食" class="mb-4 img-square" loading="lazy" />
           <p class="text-center text-secondary fw-semibold fs-lg-2xl fs-lg">高品質的美食</p>
         </li>
         <li class="col-md-3" data-aos="fade-up" data-aos-delay="600">
-          <img src="/public/area-index.png" alt="" class="mb-4 img-square" style="object-fit: fill" />
+          <img src="/area-index.png" alt="舒適環境" class="mb-4 img-square" loading="lazy" />
           <p class="text-center text-secondary fw-semibold fs-lg-2xl fs-lg">舒適的環境</p>
         </li>
       </ul>
@@ -79,7 +79,7 @@
         :initialSlide="4"
         :spaceBetween="10"
         :autoplay="{ delay: 3000, disableOnInteraction: false }"
-        :loop="true"
+        :loop="productList.length > 1"
         :pagination="{
           clickable: true,
           el: '.swiper-pagination',
@@ -116,7 +116,7 @@ import ProductCard from '@/components/client/ProductCard.vue';
 import { mapActions, mapState } from 'pinia';
 import productStore from '@/stores/productStore';
 import articleStore from '@/stores/newsStore';
-import { formatDate } from '@/composable/useHelper';
+import formatDate from '@/utils/formateDate';
 import Loading from '@/components/LoadingComp.vue';
 
 export default {

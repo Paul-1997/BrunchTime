@@ -124,7 +124,7 @@ import { Modal } from 'bootstrap';
 import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import type { VueElement } from 'vue';
-import type Article from '@/interface/news';
+import type Article from '@/types/news';
 
 export default {
   components: {

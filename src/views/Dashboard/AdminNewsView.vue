@@ -66,7 +66,7 @@ import { mapActions, mapState } from 'pinia';
 import News from '@/stores/newsStore';
 import NewsModal from '@/components/Dashboard/NewsModal.vue';
 import DeleteModal from '@/components/Dashboard/DeleteModal.vue';
-import type Article from '@/interface/news';
+import type Article from '@/types/news';
 import Loading from '@/components/LoadingComp.vue';
 
 export default {

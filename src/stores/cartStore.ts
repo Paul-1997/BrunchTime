@@ -3,12 +3,9 @@ import useFetch from '@/composable/useFetch';
 import { errorAlert, toast } from '@/composable/useAlert';
 import axios from 'axios';
 
-const { VITE_APP_API_NAME: path } = import.meta.env;
+import type { CartItem } from '@/types/cart';
 
-type CartItem = {
-  product_id: string;
-  qty: number;
-};
+const { VITE_APP_API_NAME: path } = import.meta.env;
 
 const cartStore = defineStore('cart', {
   state() {

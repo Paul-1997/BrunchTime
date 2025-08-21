@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import useFetch from '@/composable/useFetch';
 import { errorAlert, toast } from '@/composable/useAlert';
 import axios from 'axios';
-import type Article from '@/interface/news';
+import type Article from '@/types/news';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
 

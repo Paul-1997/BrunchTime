@@ -59,7 +59,7 @@ import ProductCard from '@/components/client/ProductCard.vue';
 import Pagination from '@/components/PaginationComp.vue';
 import { mapActions, mapState } from 'pinia';
 import Loading from '@/components/LoadingComp.vue';
-import Breadcrumb from '@/components/Breadcrumb.vue';
+import Breadcrumb from '@/components/BreadcrumbComp.vue';
 
 export default {
   components: {
