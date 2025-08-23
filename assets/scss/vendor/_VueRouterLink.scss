@@ -1,0 +1,18 @@
+.onActiveLink {
+  color: $secondary!important;
+}
+.nav-link{
+  color: $neutral-dark
+}
+
+@media (width > 767px) {
+  :where(.nav__link,.nav-link):not(:has(.onActiveLink)):where(:focus, :hover, :focus-within) {
+    color: $secondary!important;
+    scale: 1.05;
+  }
+}
+
+//dashboard panel
+.nav__link:has(.onActiveLink) {
+  background-color: $primary;
+}

@@ -1,0 +1,30 @@
+
+.product-card {
+  min-height: 360px;
+
+  .card-img-top{
+    object-fit: fill;
+  }
+}
+.card-img-wrap{
+  &:hover{
+    & > img{
+      scale: 1.125;
+    }
+    & > .card-img-text{
+    opacity: 1;
+    }
+  }
+}
+
+.addCart-btn:hover{
+  filter: brightness(95%);
+}
+// 避免過度變形
+@media (400px < width < 768px) {
+  .product-card {
+    img{
+      height: 360px;
+    }
+  }
+}
