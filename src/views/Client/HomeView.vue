@@ -116,7 +116,7 @@ import ProductCard from '@/components/client/ProductCard.vue';
 import { mapActions, mapState } from 'pinia';
 import productStore from '@/stores/productStore';
 import articleStore from '@/stores/newsStore';
-import formatDate from '@/utils/formateDate';
+import formatDate from '@/utils/formatDate';
 import Loading from '@/components/LoadingComp.vue';
 
 export default {
@@ -188,7 +188,7 @@ export default {
   }
   &::before {
     left: 0;
-    background-image: url('/public/bg-sanwich.png');
+    background-image: url('/bg-sanwich.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
@@ -196,7 +196,7 @@ export default {
   &::after {
     top: 0;
     right: 0;
-    background-image: url('/public/bg-burger.png');
+    background-image: url('/bg-burger.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;

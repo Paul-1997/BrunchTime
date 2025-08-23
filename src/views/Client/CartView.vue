@@ -132,6 +132,7 @@ export default {
   methods: {
     ...mapActions(cartStore, ['updateCart', 'deleteCart', 'deleteAllCart', 'getCarts']),
     async updateQty(id: string, qty: number) {
+      // eslint-disable-next-line no-param-reassign
       if (qty < 1) qty = 1;
       await this.updateCart({ product_id: id, qty }, true);
     },

@@ -103,7 +103,7 @@
 <script lang="ts">
 import { Modal } from 'bootstrap';
 import type { VueElement } from 'vue';
-import formatDate from '@/utils/formateDate';
+import formatDate from '@/utils/formatDate';
 import type Coupon from '@/types/coupon';
 
 export default {

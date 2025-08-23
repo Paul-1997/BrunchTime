@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import useFetch from '@/composable/useFetch';
 import { errorAlert, toast } from '@/composable/useAlert';
-import axios from 'axios';
+import { AxiosError } from 'axios';
 import type { Order, BuyerInfo } from '@/types/order';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
@@ -26,7 +26,9 @@ const orderStore = defineStore('orders', {
           this.pagination = data.pagination;
         }
       } catch (err) {
-        errorAlert('出錯了!');
+        if (err instanceof AxiosError) {
+          errorAlert(err.response?.data.message || '錯誤!');
+        }
       } finally {
         this.onLoading = false;
       }
@@ -38,7 +40,9 @@ const orderStore = defineStore('orders', {
         const { data } = await useFetch(apiPath, 'get');
         return data;
       } catch (err) {
-        errorAlert('發生未知錯誤');
+        if (err instanceof AxiosError) {
+          errorAlert(err.response?.data.message || '錯誤!');
+        }
         return false;
       } finally {
         this.onLoading = false;
@@ -54,7 +58,7 @@ const orderStore = defineStore('orders', {
           this.getOrders('admin');
         }
       } catch (err) {
-        if (axios.isAxiosError(err)) {
+        if (err instanceof AxiosError) {
           errorAlert(err.response?.data.message || '錯誤!');
         }
       } finally {
@@ -71,7 +75,7 @@ const orderStore = defineStore('orders', {
           this.getOrders('admin');
         }
       } catch (err) {
-        if (axios.isAxiosError(err)) {
+        if (err instanceof AxiosError) {
           errorAlert(err.response?.data.message || '錯誤!');
         }
       } finally {
@@ -86,6 +90,9 @@ const orderStore = defineStore('orders', {
         const { data } = await useFetch(apiPath, 'post', true, { data: buyerInfo });
         return data;
       } catch (err) {
+        if (err instanceof AxiosError) {
+          errorAlert(err.response?.data.message || '錯誤!');
+        }
         return false;
       } finally {
         this.onLoading = false;

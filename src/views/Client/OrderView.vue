@@ -138,10 +138,10 @@
 <script lang="ts">
 import OrderProgressbar from '@/components/client/OrderProgressbar.vue';
 import Loading from '@/components/LoadingComp.vue';
-import { formatDate } from '@/composable/useHelper';
 import cartStore from '@/stores/cartStore';
 import orderStore from '@/stores/orderStore';
 import { mapActions, mapState } from 'pinia';
+import formatDate from '@/utils/formatDate';
 
 export default {
   props: ['carts'],

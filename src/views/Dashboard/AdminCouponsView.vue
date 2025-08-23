@@ -57,7 +57,7 @@
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
 import couponStore from '@/stores/couponStore';
-import formatDate from '@/utils/formateDate';
+import formatDate from '@/utils/formatDate';
 import CouponModal from '@/components/Dashboard/CouponModal.vue';
 import DeleteModal from '@/components/Dashboard/DeleteModal.vue';
 import Pagination from '@/components/PaginationComp.vue';

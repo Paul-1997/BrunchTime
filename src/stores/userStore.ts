@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { errorAlert } from '@/composable/useAlert';
 import useFetch from '@/composable/useFetch';
 import Cookies from 'js-cookie';
-import axios from 'axios';
+import { AxiosError } from 'axios';
 import type { Admin } from '@/types/Admin';
 
 const userStore = defineStore('user', {
@@ -16,7 +16,7 @@ const userStore = defineStore('user', {
       try {
         await useFetch('v2/api/user/check', 'post', true, {});
       } catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
+        if (error instanceof AxiosError && error.response) {
           const { message } = error.response.data as { success: boolean; message: string };
 
           const result = await errorAlert(message);
@@ -29,7 +29,9 @@ const userStore = defineStore('user', {
         const { data } = await useFetch('v2/logout', 'post', true, {});
         if (data) this.$router.push('/');
       } catch (err) {
-        errorAlert('伺服器出問題了');
+        if (err instanceof AxiosError) {
+          errorAlert(err.response?.data.message || '伺服器出問題了');
+        }
       }
     },
   },

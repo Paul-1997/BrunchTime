@@ -34,7 +34,7 @@
           <button
             type="button"
             class="addCart-btn w-100 rounded-3 d-block border-0 py-2 py-lg-4 bg-accent text-secondary fw-semibold"
-            @click="updateCart({ product_id: product.id!, qty })"
+            @click="updateQty(product.id, qty)"
           >
             加入購物車
           </button>
@@ -69,6 +69,11 @@ export default {
   methods: {
     ...mapActions(productStore, ['getSingleProduct']),
     ...mapActions(cartStore, ['updateCart']),
+    async updateQty(productId: string | undefined, qty: number) {
+      if (productId) {
+        await this.updateCart({ product_id: productId, qty });
+      }
+    },
   },
   async mounted() {
     const data = await this.getSingleProduct(this.$route.params.id as string);

@@ -83,7 +83,7 @@
 import type Article from '@/types/news';
 import articleStore from '@/stores/newsStore';
 import { mapActions, mapState } from 'pinia';
-import formatDate from '@/utils/formateDate';
+import formatDate from '@/utils/formatDate';
 import Loading from '@/components/LoadingComp.vue';
 import Breadcrumb from '@/components/BreadcrumbComp.vue';
 

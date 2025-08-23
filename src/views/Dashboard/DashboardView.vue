@@ -6,7 +6,7 @@
       <div class="row g-4" v-else>
         <!-- 統計卡片 -->
         <div class="col-md-6 col-lg-3">
-          <div class="card h-100 border-0 shadow-sm">
+          <div class="card h-100 border-1 shadow">
             <div class="card-body">
               <h5 class="card-title text-primary">總產品數</h5>
               <p class="card-text fs-2xl">{{ productCount }}</p>
@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
-          <div class="card h-100 border-0 shadow-sm">
+          <div class="card h-100 border-1 shadow">
             <div class="card-body">
               <h5 class="card-title text-success">總訂單數</h5>
               <p class="card-text fs-2xl">{{ orderCount }}</p>
@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
-          <div class="card h-100 border-0 shadow-sm">
+          <div class="card h-100 border-1 shadow">
             <div class="card-body">
               <h5 class="card-title text-info">本月營業額</h5>
               <p class="card-text fs-2xl">NT$ {{ monthlyRevenue }}</p>
@@ -30,7 +30,7 @@
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
-          <div class="card h-100 border-0 shadow-sm">
+          <div class="card h-100 border-1 shadow">
             <div class="card-body">
               <h5 class="card-title text-warning">待處理訂單</h5>
               <p class="card-text fs-2xl">{{ pendingOrders }}</p>
@@ -39,14 +39,14 @@
         </div>
 
         <!-- 最新訂單 -->
-        <div class="col-12">
-          <div class="card border-0 shadow-sm">
+        <div class="order-list-container col-12">
+          <div class="card border-1 shadow h-100 flex-grow-1">
             <div class="card-header bg-white border-0">
-              <h5 class="mb-0">最新訂單</h5>
+              <h5 class="mb-0 fs-4xl fw-bold">最新訂單</h5>
             </div>
-            <div class="card-body">
+            <div class="card-body p-0">
               <div class="table-responsive">
-                <table class="table">
+                <table class="table table-striped table-hover mb-0">
                   <thead>
                     <tr>
                       <th>訂單編號</th>
@@ -84,8 +84,8 @@ import Panel from '@/components/Dashboard/PanelComp.vue';
 import userStore from '@/stores/userStore';
 import productStore from '@/stores/productStore';
 import orderStore from '@/stores/orderStore';
-import { mapActions } from 'pinia';
-import formatDate from '@/utils/formateDate';
+import { mapActions, mapState } from 'pinia';
+import formatDate from '@/utils/formatDate';
 import type { Order } from '@/types/order';
 
 export default {
@@ -101,6 +101,9 @@ export default {
       pendingOrders: 0,
     };
   },
+  computed: {
+    ...mapState(orderStore, ['orderList']),
+  },
   methods: {
     ...mapActions(userStore, ['checkLogin', 'logout']),
     ...mapActions(productStore, ['getAllProducts']),
@@ -112,33 +115,33 @@ export default {
         'badge bg-warning': !isPaid,
       };
     },
-    // async fetchDashboardData() {
-    //   try {
-    //     const products = (await this.getAllProducts('admin')) || [];
-    //     // const orders = (await this.getOrders('admin')) || [];
-    //     console.log(products, orders);
-    //     if (products.length && orders.length) {
-    //       this.productCount = products.length;
-    //       this.orderCount = orders.length;
-    //       this.recentOrders = orders.slice(0, 5);
+    async handleDashboardData() {
+      try {
+        const products = (await this.getAllProducts('admin')) || [];
+        await this.getOrders('admin');
+        if (products) {
+          this.productCount = Object.keys(products).length;
+        }
+        if (this.orderList.length) {
+          this.orderCount = this.orderList.length;
+          this.recentOrders = this.orderList.slice(0, 5);
+          // 計算本月營業額
+          const currentMonth = new Date().getMonth();
+          this.monthlyRevenue = this.orderList
+            .filter((order: Order) => new Date(order.create_at).getMonth() === currentMonth && order.is_paid)
+            .reduce((sum: number, order: Order) => sum + order.total, 0);
 
-    //       // 計算本月營業額
-    //       const currentMonth = new Date().getMonth();
-    //       this.monthlyRevenue = orders
-    //         .filter((order: Order) => new Date(order.create_at).getMonth() === currentMonth && order.is_paid)
-    //         .reduce((sum: number, order: Order) => sum + order.total, 0);
-
-    //       // 計算待處理訂單
-    //       this.pendingOrders = orders.filter((order: Order) => !order.is_paid).length;
-    //     }
-    //   } catch (error) {
-    //     console.error('Error fetching dashboard data:', error);
-    //   }
-    // },
+          // 計算待處理訂單
+          this.pendingOrders = this.orderList.filter((order: Order) => !order.is_paid).length;
+        }
+      } catch (error) {
+        // 錯誤已被 try-catch 捕獲，不需要額外處理
+      }
+    },
   },
   async mounted() {
     await this.checkLogin();
-    // await this.fetchDashboardData();
+    await this.handleDashboardData();
   },
 };
 </script>
@@ -150,20 +153,16 @@ export default {
   }
 }
 
-.card {
-  transition: transform 0.2s ease-in-out;
-
-  &:hover {
-    transform: translateY(-5px);
-  }
-}
-
 .badge {
   font-size: 0.875rem;
   padding: 0.5em 0.75em;
 }
 
 .table {
+  @media (width > 997px) {
+    font-size: 1.125rem;
+  }
+
   th {
     font-weight: 600;
     color: #495057;
@@ -178,5 +177,9 @@ export default {
   font-size: 2rem;
   font-weight: 600;
   color: #2c3e50;
+}
+
+.order-list-container {
+  min-block-size: calc(100vh - 150px);
 }
 </style>

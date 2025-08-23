@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import useFetch from '@/composable/useFetch';
 import type Coupon from '@/types/coupon';
 import { errorAlert, toast } from '@/composable/useAlert';
-import axios from 'axios';
+import { AxiosError } from 'axios';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
 const couponStore = defineStore('coupons', {
@@ -23,7 +23,9 @@ const couponStore = defineStore('coupons', {
         this.couponList = data.coupons;
         this.pagination = data.pagination;
       } catch (err) {
-        errorAlert();
+        if (err instanceof AxiosError) {
+          errorAlert(err.response?.data.message || '錯誤!');
+        }
       } finally {
         this.onLoading = false;
       }
@@ -38,7 +40,7 @@ const couponStore = defineStore('coupons', {
           this.getCoupons();
         }
       } catch (err) {
-        if (axios.isAxiosError(err)) {
+        if (err instanceof AxiosError) {
           errorAlert(err.response?.data.message || '錯誤!');
         }
       } finally {
@@ -56,7 +58,7 @@ const couponStore = defineStore('coupons', {
           this.getCoupons();
         }
       } catch (err) {
-        if (axios.isAxiosError(err)) {
+        if (err instanceof AxiosError) {
           errorAlert(err.response?.data.message || '錯誤!');
         }
       } finally {

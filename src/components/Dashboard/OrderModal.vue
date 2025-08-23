@@ -349,17 +349,17 @@ export default {
       this.$emit('updateOrder', this.deepCloneOrder);
       this.closeModal();
     },
+    ...mapActions(productStore, ['getAllProducts']),
   },
   computed: {
-    ...mapActions(productStore, ['getAllProducts']),
     productItemList(): Product[] | [] {
       return this.itemList;
     },
   },
   async mounted() {
     this.modal = new Modal(this.$refs.orderEdit as VueElement);
-    const products = await this.getAllProducts;
-    this.itemList = products || [];
+    const products = (await this.getAllProducts('admin')) || [];
+    this.itemList = Object.values(products) as Product[];
   },
   watch: {
     order() {

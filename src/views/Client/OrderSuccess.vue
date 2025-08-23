@@ -63,7 +63,7 @@
 <script lang="ts">
 import OrderProgressbar from '@/components/client/OrderProgressbar.vue';
 import orderStore from '@/stores/orderStore';
-import formatDate from '@/utils/formateDate';
+import formatDate from '@/utils/formatDate';
 import { mapActions, mapState } from 'pinia';
 import Loading from '@/components/LoadingComp.vue';
 import type { Order } from '@/types/order';

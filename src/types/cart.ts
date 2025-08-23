@@ -14,3 +14,8 @@ export interface Cart {
   total: number;
   final_total: number;
 }
+
+export interface AddCartPayload {
+  product_id: string;
+  qty: number;
+}

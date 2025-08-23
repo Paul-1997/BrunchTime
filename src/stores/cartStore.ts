@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 import useFetch from '@/composable/useFetch';
 import { errorAlert, toast } from '@/composable/useAlert';
-import axios from 'axios';
+import { AxiosError } from 'axios';
 
-import type { CartItem } from '@/types/cart';
+import type { AddCartPayload } from '@/types/cart';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
 
@@ -27,12 +27,14 @@ const cartStore = defineStore('cart', {
           this.f_total = Math.round(data.data.final_total);
         }
       } catch (error) {
-        errorAlert('發生錯誤');
+        if (error instanceof AxiosError) {
+          errorAlert(error.response?.data.message || '發生錯誤');
+        }
       } finally {
         this.onLoading = false;
       }
     },
-    async updateCart(cartItem: CartItem, isExist = false) {
+    async updateCart(cartItem: AddCartPayload, isExist = false) {
       try {
         const method = isExist ? 'put' : 'post';
         let apiPath = `v2/api/${path}/cart`;
@@ -44,7 +46,7 @@ const cartStore = defineStore('cart', {
           this.getCarts();
         }
       } catch (err) {
-        if (axios.isAxiosError(err)) {
+        if (err instanceof AxiosError) {
           errorAlert(err.response?.data.message || '錯誤!');
         }
       } finally {
@@ -59,7 +61,7 @@ const cartStore = defineStore('cart', {
           this.getCarts();
         }
       } catch (err) {
-        if (axios.isAxiosError(err)) {
+        if (err instanceof AxiosError) {
           errorAlert(err.response?.data.message || '錯誤!');
         }
       } finally {
@@ -75,7 +77,7 @@ const cartStore = defineStore('cart', {
           this.getCarts();
         }
       } catch (err) {
-        if (axios.isAxiosError(err)) {
+        if (err instanceof AxiosError) {
           errorAlert(err.response?.data.message || '錯誤!');
         }
       } finally {

@@ -55,6 +55,7 @@
 import { mapActions } from 'pinia';
 import userStore from '@/stores/userStore';
 import type { Admin } from '@/types/Admin';
+import { AxiosError } from 'axios';
 
 export default {
   data() {
@@ -79,7 +80,7 @@ export default {
           this.$router.push('/dashboard');
         }
       } catch (error) {
-        this.loginFailMsg = '帳號或密碼錯誤!';
+        this.loginFailMsg = error instanceof AxiosError ? error.response?.data.message : '帳號或密碼錯誤!';
       } finally {
         this.isLoading = false;
       }

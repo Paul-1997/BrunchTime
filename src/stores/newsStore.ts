@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import useFetch from '@/composable/useFetch';
 import { errorAlert, toast } from '@/composable/useAlert';
-import axios from 'axios';
+import { AxiosError } from 'axios';
 import type Article from '@/types/news';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
@@ -23,7 +23,9 @@ const articleStore = defineStore('articles', {
         this.articleList = data.articles;
         this.pagination = data.pagination;
       } catch (err) {
-        errorAlert();
+        if (err instanceof AxiosError) {
+          errorAlert(err.response?.data.message || '錯誤!');
+        }
       } finally {
         this.onLoading = false;
       }
@@ -35,7 +37,9 @@ const articleStore = defineStore('articles', {
         const { data } = await useFetch(apiPath, 'get');
         return data.article;
       } catch (err) {
-        errorAlert();
+        if (err instanceof AxiosError) {
+          errorAlert(err.response?.data.message || '錯誤!');
+        }
         return false;
       } finally {
         this.onLoading = false;
@@ -51,7 +55,7 @@ const articleStore = defineStore('articles', {
           this.getArticles('admin');
         }
       } catch (err) {
-        if (axios.isAxiosError(err)) {
+        if (err instanceof AxiosError) {
           errorAlert(err.response?.data.message || '錯誤!');
         }
       } finally {
@@ -69,7 +73,7 @@ const articleStore = defineStore('articles', {
           this.getArticles('admin');
         }
       } catch (err) {
-        if (axios.isAxiosError(err)) {
+        if (err instanceof AxiosError) {
           errorAlert(err.response?.data.message || '錯誤!');
         }
       } finally {

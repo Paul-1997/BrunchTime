@@ -3,7 +3,7 @@ import useFetch from '@/composable/useFetch';
 import type Product from '@/types/product';
 import type PaginationType from '@/types/pagination';
 import { errorAlert, toast } from '@/composable/useAlert';
-import axios from 'axios';
+import { AxiosError } from 'axios';
 
 const { VITE_APP_API_NAME: path } = import.meta.env;
 const productStore = defineStore('products', {
@@ -26,20 +26,21 @@ const productStore = defineStore('products', {
         this.productList = data.products;
         this.pagination = data.pagination;
       } catch (err) {
-        errorAlert('出錯了!');
+        if (err instanceof AxiosError) {
+          errorAlert(err.response?.data.message || '錯誤!');
+        }
       } finally {
         this.onLoading = false;
       }
     },
-    async getAllProducts(from: 'admin' | 'custom'): Promise<Product[] | false> {
+    async getAllProducts(from: 'admin' | 'custom'): Promise<Record<string, Product> | false> {
       try {
         const apiPath = `v2/api/${path}/${from === 'admin' ? 'admin/' : ''}products/all`;
-        // fetch api
         this.onLoading = true;
-        const { data } = await useFetch(apiPath, 'get', from === 'admin');
-        return data;
+        const data = await useFetch(apiPath, 'get', from === 'admin');
+        return data.data.products;
       } catch (err) {
-        if (axios.isAxiosError(err)) {
+        if (err instanceof AxiosError) {
           errorAlert(err.response?.data.message || '錯誤!');
         }
         return false;
@@ -54,7 +55,7 @@ const productStore = defineStore('products', {
         const { data } = await useFetch(apiPath, 'get');
         return data;
       } catch (err) {
-        if (axios.isAxiosError(err)) {
+        if (err instanceof AxiosError) {
           const result = await errorAlert(err.response?.data.message, '取得產品資訊異常', {
             confirmButtonText: '返回購物列表',
           });
@@ -78,7 +79,7 @@ const productStore = defineStore('products', {
           this.getProducts('admin');
         }
       } catch (err) {
-        if (axios.isAxiosError(err)) {
+        if (err instanceof AxiosError) {
           errorAlert(err.response?.data.message || '錯誤!');
         }
       } finally {
@@ -96,7 +97,7 @@ const productStore = defineStore('products', {
           this.getProducts('admin');
         }
       } catch (err) {
-        if (axios.isAxiosError(err)) {
+        if (err instanceof AxiosError) {
           errorAlert(err.response?.data.message || '');
         }
       } finally {

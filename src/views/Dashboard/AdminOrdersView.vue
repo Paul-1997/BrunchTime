@@ -164,7 +164,7 @@ import DeleteModal from '@/components/Dashboard/DeleteModal.vue';
 import orderStore from '@/stores/orderStore';
 import type { Order } from '@/types/order';
 import OrderModal from '@/components/Dashboard/OrderModal.vue';
-import formatDate from '@/utils/formateDate';
+import formatDate from '@/utils/formatDate';
 import Loading from '@/components/LoadingComp.vue';
 
 export default {
