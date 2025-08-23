@@ -1,5 +1,5 @@
 <template>
-  <div class="banner" style="background-image: url('BrunchTime/public/aboutBanner.jpg')">
+  <div class="banner">
     <h2 class="rounded-3 w-fit mx-auto text-center text-secondary fw-bold fs-3xl bg-primary bg-opacity-75 px-8">
       關於我們<br />
       About Us
@@ -49,6 +49,12 @@
 </template>
 
 <style lang="scss">
+.banner {
+  background-image: url('/BrunchTime/aboutBanner.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 .storeMap {
   width: 100%;
   --map_width: clamp(300px, 85vw, 864px);
